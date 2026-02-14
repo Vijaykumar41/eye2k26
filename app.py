@@ -43,7 +43,7 @@ scope = [
 ]
 
 if os.environ.get("GOOGLE_CREDENTIALS"):
-    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
+#    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 else:
     creds = ServiceAccountCredentials.from_json_keyfile_name(
