@@ -68,15 +68,15 @@ def ensure_headers():
         sheet.append_row(HEADERS)
 
 # ==============================
-# EMAIL CONFIG
+# EMAIL CONFIG (FROM ENV VARS)
 # ==============================
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-EMAIL_ADDRESS = "officialeye2k26@gmail.com"
-EMAIL_PASSWORD = "eyxs kczc fdgh upbo"
+EMAIL_ADDRESS = os.environ.get("EMAIL_USER")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASS")
 
 # ==============================
-# HELPERS
+# HELPER FUNCTIONS
 # ==============================
 def generate_id(event):
     code = "".join(word[0] for word in event.split()).upper()
@@ -84,12 +84,14 @@ def generate_id(event):
 
 def generate_ticket(data):
     os.makedirs("tickets", exist_ok=True)
-    path = f"tickets/{data['id']}.pdf"
+    path = f"tickets/{data['Registration ID']}.pdf"
+
     doc = SimpleDocTemplate(path, pagesize=A4)
     styles = getSampleStyleSheet()
 
     elements = [Paragraph("EYE2K26 Event Ticket", styles["Title"]), Spacer(1,20)]
-    for k,v in data.items():
+
+    for k, v in data.items():
         elements.append(Paragraph(f"<b>{k}</b>: {v}", styles["Normal"]))
         elements.append(Spacer(1,10))
 
@@ -101,13 +103,18 @@ def send_email(email, subject, body, pdf):
     msg["From"] = EMAIL_ADDRESS
     msg["To"] = email
     msg["Subject"] = subject
+
     msg.attach(MIMEText(body, "html"))
 
     with open(pdf, "rb") as f:
         part = MIMEBase("application", "octet-stream")
         part.set_payload(f.read())
+
     encoders.encode_base64(part)
-    part.add_header("Content-Disposition", f'attachment; filename="{os.path.basename(pdf)}"')
+    part.add_header(
+        "Content-Disposition",
+        f'attachment; filename="{os.path.basename(pdf)}"'
+    )
     msg.attach(part)
 
     server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -117,55 +124,57 @@ def send_email(email, subject, body, pdf):
     server.quit()
 
 # ==============================
-# REGISTER API
+# REGISTER API (AUTO EMAIL + PDF)
 # ==============================
 @app.route("/register", methods=["POST"])
 def register():
+    if not sheet:
+        return jsonify({"error": "Database not connected"}), 500
+
     data = request.json
     ensure_headers()
 
     reg_id = generate_id(data["event"])
-    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Save to Google Sheet
     sheet.append_row([
         data["name"], data["email"], data["mobile"],
         data["college"], data["event"], data["amount"],
-        "PENDING", "", reg_id, time
+        "PAID", "", reg_id, timestamp
     ])
 
-    return jsonify({"status":"success","id":reg_id})
+    # Generate PDF Ticket
+    pdf_path = generate_ticket({
+        "Name": data["name"],
+        "Event": data["event"],
+        "Registration ID": reg_id,
+        "College": data["college"],
+        "Email": data["email"]
+    })
+
+    # Send Email
+    send_email(
+        data["email"],
+        "EYE2K26 Registration Successful 🎉",
+        f"""
+        <h2>Registration Confirmed</h2>
+        <p><b>Name:</b> {data["name"]}</p>
+        <p><b>Event:</b> {data["event"]}</p>
+        <p><b>Registration ID:</b> {reg_id}</p>
+        <p>Your ticket is attached.</p>
+        """,
+        pdf_path
+    )
+
+    return jsonify({
+        "status": "success",
+        "registration_id": reg_id
+    })
 
 # ==============================
-# PAYMENT CONFIRM
-# ==============================
-@app.route("/payment-confirm", methods=["POST"])
-def confirm():
-    data = request.json
-    email = data["email"]
-    pid = data["payment_id"]
-
-    rows = sheet.get_all_records()
-
-    for i,row in enumerate(rows):
-        if row["Email"] == email:
-            sheet.update_cell(i+2,7,"PAID")
-            sheet.update_cell(i+2,8,pid)
-
-            pdf = generate_ticket({
-                "Name":row["Name"],
-                "Event":row["Event"],
-                "ID":row["Registration_ID"],
-                "Payment":pid
-            })
-
-            send_email(email,"Payment Confirmed","<h2>Success</h2>",pdf)
-            return jsonify({"status":"success"})
-
-    return jsonify({"status":"not found"}),404
-
-# ==============================
-# RUN SERVER
+# SERVER START (RENDER PORT)
 # ==============================
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT",10000))
-    app.run(host="0.0.0.0",port=port)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
