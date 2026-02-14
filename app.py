@@ -73,7 +73,7 @@ def ensure_headers():
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 EMAIL_ADDRESS = "officialeye2k26@gmail.com"
-EMAIL_PASSWORD = "YOUR_APP_PASSWORD_HERE"
+EMAIL_PASSWORD = "eyxs kczc fdgh upbo"
 
 # ==============================
 # HELPERS
