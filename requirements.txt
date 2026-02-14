@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 Flask
 flask-cors
 gspread
 oauth2client
 gunicorn
 reportlab
+=======
+Flask
+flask-cors
+gspread
+oauth2client
+gunicorn
+reportlab
+>>>>>>> 47c8fc22be16a3c1a300c91bf117a3c54b5e847b

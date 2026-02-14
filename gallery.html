@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -341,3 +342,348 @@ document.querySelectorAll(".flow-track").forEach(track => {
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EYE2K26 | Gallery</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<style>
+/* ================= GALLERY BASE ================= */
+.gallery-section{
+  padding:120px 6%;
+}
+
+.gallery-section h2{
+  text-align:center;
+  color:#38bdf8;
+  margin-bottom:40px;
+  font-size:34px;
+  letter-spacing:1px;
+}
+
+/* ================= CONTINUOUS FLOW ================= */
+.flow-wrapper{
+  overflow:hidden;
+  width:100%;
+}
+
+.flow-track{
+  display:flex;
+  gap:35px;
+  width:fit-content;
+  animation: flowLeft linear infinite;
+  animation-duration: 90s;
+  will-change: transform;
+}
+
+/* SPEED VARIANTS */
+.flow-track.fast{ animation-duration: 70s; }
+.flow-track.slow{ animation-duration: 120s; }
+
+@keyframes flowLeft{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+
+/* ================= IMAGES ================= */
+.flow-track img{
+  width:60vw;
+  max-width:520px;
+  height:260px;
+  object-fit:cover;
+  border-radius:22px;
+  box-shadow:
+    0 0 30px rgba(56,189,248,.35),
+    inset 0 0 20px rgba(56,189,248,.15);
+  transition: transform .6s, box-shadow .6s, filter .6s;
+  cursor:pointer;
+}
+
+/* ELECTRICAL HOVER */
+.flow-track img:hover{
+  transform: translateY(-20px) scale(1.08);
+  box-shadow:
+    0 0 70px rgba(56,189,248,.8),
+    inset 0 0 40px rgba(168,85,247,.25);
+  filter: brightness(1.2);
+}
+
+/* PAUSE ON HOVER */
+.flow-wrapper:hover .flow-track{
+  animation-play-state: paused;
+}
+
+/* ================= LIGHTBOX ================= */
+.lightbox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.lightbox img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:20px;
+  box-shadow:0 0 60px rgba(56,189,248,.7);
+}
+
+.lightbox-close{
+  position:absolute;
+  top:25px;
+  right:40px;
+  font-size:45px;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* ================= GLASS ================= */
+.glass{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(56,189,248,.15);
+  backdrop-filter:blur(18px);
+  border-radius:30px;
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:768px){
+  .flow-track img{
+    width:80vw;
+    height:180px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="logo">EYE2K26</div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="events.html">Events</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<!-- ================= PRESENT STUDENTS ================= -->
+<section class="gallery-section">
+  <h2>Batches 2022 TO 2025</h2>
+  <div class="flow-wrapper">
+    <div class="flow-track fast">
+      <img src="images/IMG20240716135730.jpg" onclick="openLightbox(this.src)">
+      <img src="images/IMG20240716143327.jpg" onclick="openLightbox(this.src)">
+      <img src="images/IMG20240716144756.jpg" onclick="openLightbox(this.src)">
+      <img src="images/IMG20240717075253.jpg" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<!-- ================= EYE2K25 ================= -->
+<section class="gallery-section glass">
+  <h2>EYE2K25 Highlights</h2>
+  <div class="flow-wrapper">
+    <div class="flow-track">
+      <img src="images/2501.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2502.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2503.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2504.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2505.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2506.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2507.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2508.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2509.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2510.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2511.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2512.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2513.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2514.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2515.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2516.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2517.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2518.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2519.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2520.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2521.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2522.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2523.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2524.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2525.JPG" onclick="openLightbox(this.src)">
+      
+    </div>
+  </div>
+</section>
+
+<!-- ================= EYE2K24 ================= -->
+<section class="gallery-section">
+  <h2>EYE2K23 Highlights</h2>
+  <div class="flow-wrapper">
+    <div class="flow-track">
+      <img src="images\2302.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2303.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2304.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2305.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2306.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2307.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2308.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2309.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2310.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2311.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2312.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2313.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2314.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2315.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2316.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2317.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2318.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2319.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2320.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2321.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2322.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2323.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2324.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2325.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2326.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2327.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2328.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2329.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2330.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2331.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2332.JPG" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+<!-- ================= EYE2K22 ================= -->
+<section class="gallery-section glass">
+  <h2>EYE2K22 Highlights</h2>
+  <div class="flow-wrapper">
+    <div class="flow-track">
+      <img src="images/2201.JPG" onclick="openLightbox(this.src)">
+      <img src="images\2202.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2203.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2204.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2205.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2206.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2207.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2208.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2209.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2210.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2211.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2212.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2213.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2214.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2215.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2216.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2217.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2218.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2219.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2220.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2221.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2222.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2223.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2224.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2225.JPG" onclick="openLightbox(this.src)">
+      
+    </div>
+  </div>
+</section>
+
+<!-- ================= EYE2K19 ================= -->
+<section class="gallery-section">
+  <h2>EYE2K19 Highlights</h2>
+  <div class="flow-wrapper">
+    <div class="flow-track">
+      <img src="images\2001.jpg" onclick="openLightbox(this.src)">
+      <img src="images/2002.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2003.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2004.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2005.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2006.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2007.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2008.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2009.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2010.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2011.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2012.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2013.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2014.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2015.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2016.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2017.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2018.JPG" onclick="openLightbox(this.src)">
+      <img src="images/2019.JPG" onclick="openLightbox(this.src)">
+    </div>
+  </div>
+</section>
+
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img">
+</div>
+
+<footer>
+  <p>© 2026 EYE2K26 | Department of EEE, JNTUA CEA</p>
+</footer>
+
+<!-- ================= JS ================= -->
+<script>
+const lightbox = document.getElementById("lightbox");
+
+function openLightbox(src){
+  lightbox.style.display = "flex";
+  document.getElementById("lightbox-img").src = src;
+}
+
+function closeLightbox(){
+  lightbox.style.display = "none";
+}
+
+/* HAMBURGER MENU */
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("navLinks");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+    hamburger.classList.toggle("active");
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+      hamburger.classList.remove("active");
+    });
+  });
+});
+
+/* AUTO DUPLICATE IMAGES FOR INFINITE FLOW */
+document.querySelectorAll(".flow-track").forEach(track => {
+  const images = [...track.children];
+  images.forEach(img => {
+    track.appendChild(img.cloneNode(true));
+  });
+});
+</script>
+
+</body>
+</html>
+>>>>>>> 47c8fc22be16a3c1a300c91bf117a3c54b5e847b
