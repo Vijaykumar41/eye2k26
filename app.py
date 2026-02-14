@@ -65,21 +65,37 @@ def serve_files(filename):
 # =====================================================
 # GOOGLE SHEETS CONFIG
 # =====================================================
-#scope = [
- #   "https://spreadsheets.google.com/feeds",
- #   "https://www.googleapis.com/auth/drive"
-#]
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
 
-#if os.environ.get("GOOGLE_CREDENTIALS"):
-#    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
-  #  creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-#else:
-  #  creds = ServiceAccountCredentials.from_json_keyfile_name(
-  #      "backend/credentials.json", scope
-  #  )
+sheet = None
 
-#client = gspread.authorize(creds)
-#sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+try:
+    creds_json = os.environ.get("GOOGLE_CREDENTIALS")
+
+    if creds_json:
+        creds_dict = json.loads(creds_json)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        client = gspread.authorize(creds)
+        sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+
+        # ⭐ ADD THIS PART HERE
+        if sheet and not sheet.row_values(1):
+            sheet.append_row([
+                "Name", "Email", "Mobile", "College", "Event",
+                "Amount", "Payment_Status", "Payment_ID",
+                "Registration_ID", "Timestamp"
+            ])
+
+        print("✅ Google Sheets connected successfully")
+
+    else:
+        print("⚠️ GOOGLE_CREDENTIALS not found")
+
+except Exception as e:
+    print("❌ Google Sheets connection failed:", e)
 
 # =====================================================
 # GOOGLE SHEET HEADERS
