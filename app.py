@@ -1,12 +1,12 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 import random
 import os
-import smtplib
 import json
+import smtplib
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,106 +17,26 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
-
-from flask import Flask, send_from_directory, request, jsonify
-from flask_cors import CORS
-import os
-<<<<<<< HEAD
-
-# IMPORTANT — serve frontend from same folder
+# ==============================
+# FLASK SETUP
+# ==============================
 app = Flask(__name__, static_folder=".", static_url_path="")
 CORS(app)
 
-# =========================
-# HOME ROUTE (LOAD INDEX)
-# =========================
-=======
-from flask import Flask, request, jsonify
-
-# 👉 VERY IMPORTANT: set static folder to current directory
-app = Flask(__name__, static_folder=".", static_url_path="")
-
-# ========================
-# HOME ROUTE (INDEX.HTML)
-# ========================
->>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
+# ==============================
+# SERVE FRONTEND
+# ==============================
 @app.route("/")
 def home():
     return app.send_static_file("index.html")
 
-<<<<<<< HEAD
-
-# =========================
-# SERVE ALL FILES
-# =========================
 @app.route("/<path:path>")
 def serve_files(path):
     return app.send_static_file(path)
 
-
-# =========================
-# TEST BACKEND ROUTE
-# =========================
-@app.route("/test")
-def test():
-    return jsonify({"status": "Backend Working"})
-
-
-# =========================
-# RUN APP (RENDER PORT)
-# =========================
-=======
-# ========================
-# SERVE ALL OTHER FILES
-# ========================
-@app.route("/<path:path>")
-def static_files(path):
-    return app.send_static_file(path)
-
-# ========================
-# TEST ROUTE
-# ========================
-@app.route("/test")
-def test():
-    return {"message": "Backend working"}
-
-# ========================
-# RUN APP (RENDER PORT)
-# ========================
->>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
-
-
-
-
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
-# =====================================================
-# FLASK SETUP
-# =====================================================
-app = Flask(__name__)
-CORS(app)
-
-# ===== SERVE FRONTEND FILES =====
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-@app.route("/")
-def home():
-    return send_from_directory(BASE_DIR, "index.html")
-
-@app.route("/<path:filename>")
-def serve_files(filename):
-    return send_from_directory(BASE_DIR, filename)
-
-# =====================================================
+# ==============================
 # GOOGLE SHEETS CONFIG
-# =====================================================
+# ==============================
 scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive"
@@ -126,94 +46,68 @@ sheet = None
 
 try:
     creds_json = os.environ.get("GOOGLE_CREDENTIALS")
-
     if creds_json:
         creds_dict = json.loads(creds_json)
         creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
         sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
-
-        # ⭐ ADD THIS PART HERE
-        if sheet and not sheet.row_values(1):
-            sheet.append_row([
-                "Name", "Email", "Mobile", "College", "Event",
-                "Amount", "Payment_Status", "Payment_ID",
-                "Registration_ID", "Timestamp"
-            ])
-
-        print("✅ Google Sheets connected successfully")
-
+        print("Google Sheets connected")
     else:
-        print("⚠️ GOOGLE_CREDENTIALS not found")
-
+        print("GOOGLE_CREDENTIALS missing")
 except Exception as e:
-    print("❌ Google Sheets connection failed:", e)
+    print("Google Sheets error:", e)
 
-# =====================================================
-# GOOGLE SHEET HEADERS
-# =====================================================
 HEADERS = [
     "Name", "Email", "Mobile", "College", "Event",
     "Amount", "Payment_Status", "Payment_ID",
     "Registration_ID", "Timestamp"
 ]
 
-def ensure_sheet_headers():
-    first_row = sheet.row_values(1)
-    if first_row == []:
-        sheet.insert_row(HEADERS, 1)
+def ensure_headers():
+    if sheet and sheet.row_values(1) == []:
+        sheet.append_row(HEADERS)
 
-# =====================================================
+# ==============================
 # EMAIL CONFIG
-# =====================================================
+# ==============================
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 EMAIL_ADDRESS = "officialeye2k26@gmail.com"
-EMAIL_PASSWORD = "eyxs kczc fdgh upbo"
+EMAIL_PASSWORD = "YOUR_APP_PASSWORD_HERE"
 
-# =====================================================
-# HELPER FUNCTIONS
-# =====================================================
-def generate_registration_id(event):
+# ==============================
+# HELPERS
+# ==============================
+def generate_id(event):
     code = "".join(word[0] for word in event.split()).upper()
-    return f"EYE26-{code}-{random.randint(100000, 999999)}"
+    return f"EYE26-{code}-{random.randint(100000,999999)}"
 
-def generate_pdf_ticket(data):
+def generate_ticket(data):
     os.makedirs("tickets", exist_ok=True)
-
-    file_path = f"tickets/{data['registration_id']}.pdf"
-    doc = SimpleDocTemplate(file_path, pagesize=A4)
-
+    path = f"tickets/{data['id']}.pdf"
+    doc = SimpleDocTemplate(path, pagesize=A4)
     styles = getSampleStyleSheet()
-    elements = []
 
-    elements.append(Paragraph("EYE2K26 Event Ticket", styles["Title"]))
-    elements.append(Spacer(1, 20))
-
-    for k, v in data.items():
-        elements.append(Paragraph(f"<b>{k}:</b> {v}", styles["Normal"]))
-        elements.append(Spacer(1, 10))
+    elements = [Paragraph("EYE2K26 Event Ticket", styles["Title"]), Spacer(1,20)]
+    for k,v in data.items():
+        elements.append(Paragraph(f"<b>{k}</b>: {v}", styles["Normal"]))
+        elements.append(Spacer(1,10))
 
     doc.build(elements)
-    return file_path
+    return path
 
-def send_email_with_pdf(to_email, subject, html_body, pdf_path):
+def send_email(email, subject, body, pdf):
     msg = MIMEMultipart()
     msg["From"] = EMAIL_ADDRESS
-    msg["To"] = to_email
+    msg["To"] = email
     msg["Subject"] = subject
+    msg.attach(MIMEText(body, "html"))
 
-    msg.attach(MIMEText(html_body, "html"))
-
-    with open(pdf_path, "rb") as f:
+    with open(pdf, "rb") as f:
         part = MIMEBase("application", "octet-stream")
         part.set_payload(f.read())
-
     encoders.encode_base64(part)
-    part.add_header(
-        "Content-Disposition",
-        f'attachment; filename="{os.path.basename(pdf_path)}"'
-    )
+    part.add_header("Content-Disposition", f'attachment; filename="{os.path.basename(pdf)}"')
     msg.attach(part)
 
     server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
@@ -222,65 +116,56 @@ def send_email_with_pdf(to_email, subject, html_body, pdf_path):
     server.send_message(msg)
     server.quit()
 
-# =====================================================
+# ==============================
 # REGISTER API
-# =====================================================
+# ==============================
 @app.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
-    ensure_sheet_headers()
+    data = request.json
+    ensure_headers()
 
-    reg_id = generate_registration_id(data["event"])
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    reg_id = generate_id(data["event"])
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     sheet.append_row([
         data["name"], data["email"], data["mobile"],
         data["college"], data["event"], data["amount"],
-        "PENDING", "", reg_id, timestamp
+        "PENDING", "", reg_id, time
     ])
 
-    return jsonify({
-        "status": "success",
-        "registration_id": reg_id
-    })
+    return jsonify({"status":"success","id":reg_id})
 
-# =====================================================
-# PAYMENT CONFIRM API
-# =====================================================
+# ==============================
+# PAYMENT CONFIRM
+# ==============================
 @app.route("/payment-confirm", methods=["POST"])
-def payment_confirm():
-    data = request.get_json()
+def confirm():
+    data = request.json
     email = data["email"]
-    payment_id = data["payment_id"]
+    pid = data["payment_id"]
 
-    records = sheet.get_all_records()
+    rows = sheet.get_all_records()
 
-    for i, row in enumerate(records):
+    for i,row in enumerate(rows):
         if row["Email"] == email:
-            sheet.update_cell(i + 2, 7, "PAID")
-            sheet.update_cell(i + 2, 8, payment_id)
+            sheet.update_cell(i+2,7,"PAID")
+            sheet.update_cell(i+2,8,pid)
 
-            pdf_path = generate_pdf_ticket({
-                "name": row["Name"],
-                "event": row["Event"],
-                "registration_id": row["Registration_ID"],
-                "payment_id": payment_id
+            pdf = generate_ticket({
+                "Name":row["Name"],
+                "Event":row["Event"],
+                "ID":row["Registration_ID"],
+                "Payment":pid
             })
 
-            send_email_with_pdf(
-                email,
-                "EYE2K26 Payment Confirmed",
-                f"<h2>Payment Successful</h2><p>ID: {row['Registration_ID']}</p>",
-                pdf_path
-            )
+            send_email(email,"Payment Confirmed","<h2>Success</h2>",pdf)
+            return jsonify({"status":"success"})
 
-            return jsonify({"status": "success"})
+    return jsonify({"status":"not found"}),404
 
-    return jsonify({"status": "error"}), 404
-
-# =====================================================
+# ==============================
 # RUN SERVER
-# =====================================================
+# ==============================
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT",10000))
+    app.run(host="0.0.0.0",port=port)
