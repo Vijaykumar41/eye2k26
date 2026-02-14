@@ -17,6 +17,28 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
+
+from flask import Flask, send_from_directory
+import os
+
+app = Flask(__name__, static_folder=".", static_url_path="")
+
+# Open index automatically
+@app.route("/")
+def home():
+    return app.send_static_file("index.html")
+
+# Serve all other frontend files
+@app.route("/<path:path>")
+def static_files(path):
+    return app.send_static_file(path)
+
+# Test backend route
+@app.route("/test")
+def test():
+    return {"message": "Backend working!"}
+
+
 # =====================================================
 # FLASK SETUP
 # =====================================================
