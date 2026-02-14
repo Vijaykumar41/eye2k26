@@ -98,34 +98,38 @@ def generate_ticket(data):
     doc.build(elements)
     return path
 
-def send_email(email, subject, body, pdf):
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_ADDRESS
-    msg["To"] = email
-    msg["Subject"] = subject
+def send_email(to_email, subject, body, pdf_path):
+    try:
+        msg = MIMEMultipart()
+        msg["From"] = EMAIL_ADDRESS
+        msg["To"] = to_email
+        msg["Subject"] = subject
 
-    msg.attach(MIMEText(body, "html"))
+        msg.attach(MIMEText(body, "html"))
 
-    with open(pdf, "rb") as f:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(f.read())
+        # Attach PDF
+        with open(pdf_path, "rb") as f:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(f.read())
 
-    encoders.encode_base64(part)
-    part.add_header(
-        "Content-Disposition",
-        f'attachment; filename="{os.path.basename(pdf)}"'
-    )
-    msg.attach(part)
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f'attachment; filename="{os.path.basename(pdf_path)}"'
+        )
+        msg.attach(part)
 
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    server.starttls()
-    server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-    server.send_message(msg)
-    server.quit()
-    print("✅ Email sent successfully")
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+
+        print("✅ Email sent successfully")
 
     except Exception as e:
         print("❌ Email failed:", e)
+
 
 # ==============================
 # REGISTER API (AUTO EMAIL + PDF)
