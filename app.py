@@ -23,7 +23,7 @@ from flask import Flask, send_from_directory
 
 app = Flask(__name__)
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 @app.route("/")
 def home():
@@ -32,6 +32,15 @@ def home():
 @app.route("/<path:filename>")
 def serve_files(filename):
     return send_from_directory(BASE_DIR, filename)
+
+@app.route("/test")
+def test():
+    return {"message": "Backend working!"}
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
 
 
 
