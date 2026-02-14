@@ -21,6 +21,7 @@ from reportlab.lib.pagesizes import A4
 from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 import os
+<<<<<<< HEAD
 
 # IMPORTANT — serve frontend from same folder
 app = Flask(__name__, static_folder=".", static_url_path="")
@@ -29,10 +30,21 @@ CORS(app)
 # =========================
 # HOME ROUTE (LOAD INDEX)
 # =========================
+=======
+from flask import Flask, request, jsonify
+
+# 👉 VERY IMPORTANT: set static folder to current directory
+app = Flask(__name__, static_folder=".", static_url_path="")
+
+# ========================
+# HOME ROUTE (INDEX.HTML)
+# ========================
+>>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
 @app.route("/")
 def home():
     return app.send_static_file("index.html")
 
+<<<<<<< HEAD
 
 # =========================
 # SERVE ALL FILES
@@ -53,6 +65,25 @@ def test():
 # =========================
 # RUN APP (RENDER PORT)
 # =========================
+=======
+# ========================
+# SERVE ALL OTHER FILES
+# ========================
+@app.route("/<path:path>")
+def static_files(path):
+    return app.send_static_file(path)
+
+# ========================
+# TEST ROUTE
+# ========================
+@app.route("/test")
+def test():
+    return {"message": "Backend working"}
+
+# ========================
+# RUN APP (RENDER PORT)
+# ========================
+>>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
@@ -62,7 +93,10 @@ if __name__ == "__main__":
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 00e28a3a860417a2c2991c15a7663e244507c3f4
 # =====================================================
 # FLASK SETUP
 # =====================================================
