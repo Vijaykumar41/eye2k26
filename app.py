@@ -18,25 +18,26 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
 
-from flask import Flask, send_from_directory
 import os
+from flask import Flask, send_from_directory
 
-app = Flask(__name__, static_folder=".", static_url_path="")
+app = Flask(__name__)
 
-# Open index automatically
+# Get absolute path of project directory
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
 @app.route("/")
 def home():
-    return app.send_static_file("index.html")
+    return send_from_directory(BASE_DIR, "index.html")
 
-# Serve all other frontend files
-@app.route("/<path:path>")
-def static_files(path):
-    return app.send_static_file(path)
+@app.route("/<path:filename>")
+def serve_files(filename):
+    return send_from_directory(BASE_DIR, filename)
 
-# Test backend route
 @app.route("/test")
 def test():
     return {"message": "Backend working!"}
+
 
 
 # =====================================================
