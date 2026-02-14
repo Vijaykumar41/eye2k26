@@ -157,38 +157,25 @@ def register():
         "PENDING", "", reg_id, time
     ])
 
-    return jsonify({
-        "status": "success",
-        "id": reg_id
-    })
-
-
-    # Generate PDF Ticket
-    pdf_path = generate_ticket({
+    # ✅ GENERATE PDF
+    pdf = generate_ticket({
         "Name": data["name"],
-        "Event": data["event"],
+        "Event": event_name,
         "Registration ID": reg_id,
-        "College": data["college"],
-        "Email": data["email"]
+        "Amount": amount
     })
 
-    # Send Email
+    # ✅ SEND EMAIL
     send_email(
         data["email"],
-        "EYE2K26 Registration Successful 🎉",
-        f"""
-        <h2>Registration Confirmed</h2>
-        <p><b>Name:</b> {data["name"]}</p>
-        <p><b>Event:</b> {data["event"]}</p>
-        <p><b>Registration ID:</b> {reg_id}</p>
-        <p>Your ticket is attached.</p>
-        """,
-        pdf_path
+        "EYE2K26 Registration Successful",
+        f"<h2>Registered Successfully</h2><p>Your ID: {reg_id}</p>",
+        pdf
     )
 
     return jsonify({
         "status": "success",
-        "registration_id": reg_id
+        "id": reg_id
     })
 
 # ==============================
