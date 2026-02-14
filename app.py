@@ -18,32 +18,40 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
 
-from flask import Flask, send_from_directory, request, jsonify
 import os
+from flask import Flask, request, jsonify
 
-app = Flask(__name__)
+# 👉 VERY IMPORTANT: set static folder to current directory
+app = Flask(__name__, static_folder=".", static_url_path="")
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
-# 👉 THIS OPENS INDEX.HTML
+# ========================
+# HOME ROUTE (INDEX.HTML)
+# ========================
 @app.route("/")
 def home():
-    return send_from_directory(BASE_DIR, "index.html")
+    return app.send_static_file("index.html")
 
-# 👉 THIS SERVES ALL STATIC FILES
-@app.route("/<path:filename>")
-def serve_files(filename):
-    return send_from_directory(BASE_DIR, filename)
+# ========================
+# SERVE ALL OTHER FILES
+# ========================
+@app.route("/<path:path>")
+def static_files(path):
+    return app.send_static_file(path)
 
-# 👉 TEST ROUTE
+# ========================
+# TEST ROUTE
+# ========================
 @app.route("/test")
 def test():
     return {"message": "Backend working"}
 
-
+# ========================
+# RUN APP (RENDER PORT)
+# ========================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+
 
 
 
