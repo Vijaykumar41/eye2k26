@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EYE2K26 | Electrify Your Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header class="navbar">
+  <div class="logo">EYE2K26</div>
+
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="index.html" class="active">Home</a>
+    <a href="events.html">Events</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<!-- ================= CIRCUIT BACKGROUND ================= -->
+<svg class="circuit-overlay" viewBox="0 0 1000 600" preserveAspectRatio="none">
+  <path class="circuit-line" d="M50 100 H300 V200 H600 V350 H900"/>
+  <path class="circuit-line" d="M100 500 V300 H400 V150 H700"/>
+  <circle class="circuit-node" cx="300" cy="200" r="4"/>
+  <circle class="circuit-node" cx="600" cy="350" r="4"/>
+  <circle class="circuit-node" cx="400" cy="150" r="4"/>
+</svg>
+
+<!-- ================= HERO ================= -->
+
+
+<section class="hero">
+
+  <h1>EYE2K26</h1>
+  <h4>Electrify Your Education</h4>
+  <p>National Level Technical Symposium – Department of EEE</p>
+
+  <img src="images/eye2k26ima (1).png" class="fest-logo" alt="EYE2K26 Logo">
+
+  <a href="events.html" class="btn">Explore Events</a>
+
+  <div class="hero-info">
+    <p>📅 <b>24 – 25 March 2026</b></p>
+    <p>Department of Electrical and Elctronics Engineering</p>
+    <p>📍 JNTUA College of Engineering, Ananthapuramu</p>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown">
+    <div><span id="days">00</span><small>DAYS</small></div>
+    <div><span id="hours">00</span><small>HOURS</small></div>
+    <div><span id="minutes">00</span><small>MINUTES</small></div>
+    <div><span id="seconds">00</span><small>SECONDS</small></div>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <div class="hero-highlights">
+    <span>🏆 Prizes</span>
+    <span>📜 Certificates</span>
+    <span>🤝 Networking</span>
+  </div>
+
+</section>
+
+<!-- ================= HIGHLIGHT SESSIONS ================= -->
+<section class="section fade">
+  <h2 class="highlight-title">Highlight Sessions</h2>
+
+  <div class="highlight-wrapper">
+    <button class="nav-btn left" onclick="prevSession()">❮</button>
+
+    <div class="highlight-card">
+      <img id="sessionImg" src="images/circuithunt.png" alt="Session Image">
+      <div class="highlight-content">
+        <span class="highlight-tag">SESSION</span>
+        <h3 id="sessionTitle">Theme Expo</h3>
+        <p class="date" id="sessionDate">📅 24 March 2026</p>
+        <p class="desc" id="sessionDesc">
+          Showcasing innovative ideas and prototypes in EEE.
+        </p>
+      </div>
+
+      
+    </div>
+
+    <button class="nav-btn right" onclick="nextSession()">❯</button>
+  </div>
+</section>
+
+<!-- ================= PAST EVENTS ================= -->
+<section class="section fade">
+  <h2 style="text-align:center">Past Events Highlights</h2>
+
+  <div class="past-slider">
+    <div class="past-track">
+      <img src="images/past1.jpg">
+      <img src="images/past2.jpg">
+      <img src="images/past3.jpg">
+      <img src="images/past4.jpg">
+
+      <!-- duplicate -->
+      <img src="images/past1.jpg">
+      <img src="images/past2.jpg">
+      <img src="images/past3.jpg">
+      <img src="images/past4.jpg">
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT FEST ================= -->
+<section class="section fade">
+  <div class="grid">
+    <img src="images/logo2k26.png" alt="EYE Fest">
+    <div class="text">
+      <h2>About EYE Fest</h2>
+      <p>
+        <b>EYE – Electrify Your Education</b> is a National Level Students Technical Symposium organized by the Department of Electrical and Electronics Engineering JNTUA CEA. It gives a chance to the students across the nation to explore their talent and win exciting prizes. This is a Two-Day Technical symposium that includes various events such as Workshops, Paper presentations ,Poster presentations, Circuit Hunt and Quiz.
+      </p>
+    </div>
+    
+  </div>
+</section>
+
+<!-- ================= ABOUT INSTITUTION ================= -->
+<section class="section glass fade">
+  <div class="grid">
+    <div class="text">
+      <h2>About the Institution</h2>
+      <p>
+JNTUA College of Engineering, Ananthapuramu stands aloft on a solid foundation of past glory and prestige. This college was started in the year 1946, under the post-war reconstruction program and functioned at Guindy campus, Madras for two years before moving to Anantapur in 1948. By 1958, the college settled into the present permanent buildings, including the Administrative block, Laboratories, Engineering Departments, Library, and Hostel blocks. Over the years, the college has been affiliated with Madras University, S V University, and JNTU Hyderabad. Since 2008, it has been a constituent college of JNTU Anantapur. With a campus sprawling over 185 acres, it serves as a center for technical education in a peaceful, conducive environment for learning.
+      </p>
+    </div>
+    <img src="images/jntu.webp">
+  </div>
+</section>
+
+<!-- ================= ABOUT DEPARTMENT ================= -->
+<section class="section glass fade">
+  <div class="grid">
+    <img src="images/depart.webp">
+    <div class="text">
+      <h2>About the Department</h2>
+      <p>
+        The Department of Electrical Engineering was established in 1946 along with College of Engineering Anantapur. Department offers B. Tech in Electrical & Electronics Engineering; M. Tech in Electrical Power Systems and Power & Industrial Drives.The department also provides Ph.D. in full time and part time. The department has well furnished labaratories like Digital Signal Processing lab, Power Electronics Lab, Control Systems Lab, Electrical Machines Lab, Renewable Energy Lab etc.. The department has SIEMEN's Center of Excellence with Power & Energy studies Lab and Process Control Instrumentation Lab. The department accrediated by NBA in the years 2005, 2012, 2015 and 2022. The faculty in the department are highly qualified in the diversified areas like Electrical Power Systems, Power & Industrial Drives, Control Systems, Reliability Engineering and AI in various Electrical & Electronic applications. The department has MoU with Yathva Energy Systems Hyderabad etc.. The departments has notable alumni who occupied various prestigious positions around the globe.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  <p>© 2026 EYE2K26 | Department of EEE, JNTUA CEA</p>
+</footer>
+
+
+<script>
+/* ================= SCROLL FADE ================= */
+document.addEventListener("scroll", () => {
+  document.querySelectorAll(".fade").forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+      el.classList.add("show");
+    }
+  });
+});
+
+
+/* ================= HIGHLIGHT SESSION SLIDER ================= */
+
+const sessions = [
+  {
+    title: "Technical Events",
+    tag: "TECHNICAL",
+    date: "📅 05 – 06 March 2026",
+    desc: "Project Expo, Paper Presentation, Poster Presentation, Circuit Hunt, Technical Quiz.",
+    img: "images/techni.png"
+  },
+  {
+    title: "Non-Technical Events",
+    tag: "NON-TECH",
+    date: "📅 05 – 06 March 2026",
+    desc: "Treasure Hunt, Photography, Fun & Interactive activities.",
+    img: "images/nontechni.png"
+  },
+  {
+    title: "Hackathon",
+    tag: "INNOVATION",
+    date: "📅 05 March 2026",
+    desc: "24-hour innovation challenge solving real-world electrical problems.",
+    img: "images/technical events.png"
+  },
+  {
+    title: "Cultural Events",
+    tag: "CULTURAL",
+    date: "📅 06 March 2026",
+    desc: "Music, Dance, Performances and Celebration Night.",
+    img: "images/culture.jpg"
+  },
+  {
+    title: "Fun Games",
+    tag: "ENTERTAINMENT",
+    date: "📅 23,24,25 March 2026",
+    desc: "Team games, challenges, and exciting spot events.",
+    img: "images/games.jpg"
+  },
+  {
+    title: "Flashmob",
+    tag: "SPECIAL",
+    date: "📅 24 March 2026",
+    desc: "High-energy flashmob performance by students.",
+    img: "images/flashmob.png"
+  },
+  {
+    title: "Ethnic Wear",
+    tag: "SPECIAL",
+    date: "📅 25 March 2026",
+    desc: "High-energy Traditional wear in the Department.",
+    img: "images/flashmob.jpg"
+  }
+];
+
+let currentSession = 0;
+
+function renderSession() {
+  const s = sessions[currentSession];
+
+  document.getElementById("sessionImg").src = s.img;
+  document.getElementById("sessionTitle").innerText = s.title;
+  document.getElementById("sessionDesc").innerText = s.desc;
+  document.getElementById("sessionDate").innerText = s.date;
+
+  const tagEl = document.getElementById("sessionTag");
+  if (tagEl) tagEl.innerText = s.tag;
+}
+
+function nextSession() {
+  currentSession = (currentSession + 1) % sessions.length;
+  renderSession();
+}
+
+function prevSession() {
+  currentSession = (currentSession - 1 + sessions.length) % sessions.length;
+  renderSession();
+}
+
+/* Auto-slide every 5 seconds */
+setInterval(nextSession, 5000);
+
+
+/* ================= HAMBURGER MENU ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.getElementById("navLinks");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+    hamburger.classList.toggle("active");
+  });
+
+  navLinks.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("active");
+      hamburger.classList.remove("active");
+    });
+  });
+
+  renderSession(); // load first session
+});
+</script>
+
+<script src="script.js"></script>
+</body>
+
+</body>
+</html>

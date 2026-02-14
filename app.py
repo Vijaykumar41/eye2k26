@@ -1,0 +1,190 @@
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
+import random
+import os
+import smtplib
+import json
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import A4
+
+# =====================================================
+# FLASK SETUP
+# =====================================================
+app = Flask(__name__)
+CORS(app)
+
+# ===== SERVE FRONTEND FILES =====
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+@app.route("/")
+def home():
+    return send_from_directory(BASE_DIR, "index.html")
+
+@app.route("/<path:filename>")
+def serve_files(filename):
+    return send_from_directory(BASE_DIR, filename)
+
+# =====================================================
+# GOOGLE SHEETS CONFIG
+# =====================================================
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+if os.environ.get("GOOGLE_CREDENTIALS"):
+    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+else:
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        "backend/credentials.json", scope
+    )
+
+client = gspread.authorize(creds)
+sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+
+# =====================================================
+# GOOGLE SHEET HEADERS
+# =====================================================
+HEADERS = [
+    "Name", "Email", "Mobile", "College", "Event",
+    "Amount", "Payment_Status", "Payment_ID",
+    "Registration_ID", "Timestamp"
+]
+
+def ensure_sheet_headers():
+    first_row = sheet.row_values(1)
+    if first_row == []:
+        sheet.insert_row(HEADERS, 1)
+
+# =====================================================
+# EMAIL CONFIG
+# =====================================================
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+EMAIL_ADDRESS = "officialeye2k26@gmail.com"
+EMAIL_PASSWORD = "eyxs kczc fdgh upbo"
+
+# =====================================================
+# HELPER FUNCTIONS
+# =====================================================
+def generate_registration_id(event):
+    code = "".join(word[0] for word in event.split()).upper()
+    return f"EYE26-{code}-{random.randint(100000, 999999)}"
+
+def generate_pdf_ticket(data):
+    os.makedirs("tickets", exist_ok=True)
+
+    file_path = f"tickets/{data['registration_id']}.pdf"
+    doc = SimpleDocTemplate(file_path, pagesize=A4)
+
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("EYE2K26 Event Ticket", styles["Title"]))
+    elements.append(Spacer(1, 20))
+
+    for k, v in data.items():
+        elements.append(Paragraph(f"<b>{k}:</b> {v}", styles["Normal"]))
+        elements.append(Spacer(1, 10))
+
+    doc.build(elements)
+    return file_path
+
+def send_email_with_pdf(to_email, subject, html_body, pdf_path):
+    msg = MIMEMultipart()
+    msg["From"] = EMAIL_ADDRESS
+    msg["To"] = to_email
+    msg["Subject"] = subject
+
+    msg.attach(MIMEText(html_body, "html"))
+
+    with open(pdf_path, "rb") as f:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(f.read())
+
+    encoders.encode_base64(part)
+    part.add_header(
+        "Content-Disposition",
+        f'attachment; filename="{os.path.basename(pdf_path)}"'
+    )
+    msg.attach(part)
+
+    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    server.starttls()
+    server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+    server.send_message(msg)
+    server.quit()
+
+# =====================================================
+# REGISTER API
+# =====================================================
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    ensure_sheet_headers()
+
+    reg_id = generate_registration_id(data["event"])
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    sheet.append_row([
+        data["name"], data["email"], data["mobile"],
+        data["college"], data["event"], data["amount"],
+        "PENDING", "", reg_id, timestamp
+    ])
+
+    return jsonify({
+        "status": "success",
+        "registration_id": reg_id
+    })
+
+# =====================================================
+# PAYMENT CONFIRM API
+# =====================================================
+@app.route("/payment-confirm", methods=["POST"])
+def payment_confirm():
+    data = request.get_json()
+    email = data["email"]
+    payment_id = data["payment_id"]
+
+    records = sheet.get_all_records()
+
+    for i, row in enumerate(records):
+        if row["Email"] == email:
+            sheet.update_cell(i + 2, 7, "PAID")
+            sheet.update_cell(i + 2, 8, payment_id)
+
+            pdf_path = generate_pdf_ticket({
+                "name": row["Name"],
+                "event": row["Event"],
+                "registration_id": row["Registration_ID"],
+                "payment_id": payment_id
+            })
+
+            send_email_with_pdf(
+                email,
+                "EYE2K26 Payment Confirmed",
+                f"<h2>Payment Successful</h2><p>ID: {row['Registration_ID']}</p>",
+                pdf_path
+            )
+
+            return jsonify({"status": "success"})
+
+    return jsonify({"status": "error"}), 404
+
+# =====================================================
+# RUN SERVER
+# =====================================================
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
