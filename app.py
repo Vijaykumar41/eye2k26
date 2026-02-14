@@ -128,21 +128,40 @@ def send_email(email, subject, body, pdf):
 # ==============================
 @app.route("/register", methods=["POST"])
 def register():
-    if not sheet:
-        return jsonify({"error": "Database not connected"}), 500
-
     data = request.json
     ensure_headers()
 
-    reg_id = generate_id(data["event"])
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    EVENT_FEES = {
+        "Project Expo": 10,
+        "Paper Presentation": 500,
+        "Poster Presentation": 400,
+        "Workshop": 600,
+        "Circuit Hunt": 300,
+        "Technical Quiz": 300,
+        "Hackathon": 1000,
+        "open": 200,
+        "Photography": 200,
+        "Chess": 300,
+        "Drawing": 300
+    }
 
-    # Save to Google Sheet
+    event_name = data["event"]
+    amount = EVENT_FEES.get(event_name, 0)
+
+    reg_id = generate_id(event_name)
+    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     sheet.append_row([
         data["name"], data["email"], data["mobile"],
-        data["college"], data["event"], data["amount"],
-        "PAID", "", reg_id, timestamp
+        data["college"], event_name, amount,
+        "PENDING", "", reg_id, time
     ])
+
+    return jsonify({
+        "status": "success",
+        "id": reg_id
+    })
+
 
     # Generate PDF Ticket
     pdf_path = generate_ticket({
