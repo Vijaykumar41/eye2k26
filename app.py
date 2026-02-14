@@ -37,10 +37,10 @@ def serve_files(filename):
 # =====================================================
 # GOOGLE SHEETS CONFIG
 # =====================================================
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
+#scope = [
+ #   "https://spreadsheets.google.com/feeds",
+ #   "https://www.googleapis.com/auth/drive"
+#]
 
 #if os.environ.get("GOOGLE_CREDENTIALS"):
 #    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
