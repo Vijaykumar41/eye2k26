@@ -122,6 +122,10 @@ def send_email(email, subject, body, pdf):
     server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
     server.send_message(msg)
     server.quit()
+    print("✅ Email sent successfully")
+
+    except Exception as e:
+        print("❌ Email failed:", e)
 
 # ==============================
 # REGISTER API (AUTO EMAIL + PDF)
