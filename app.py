@@ -17,6 +17,34 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
+
+import os
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+@app.route("/")
+def home():
+    return send_from_directory(BASE_DIR, "index.html")
+
+@app.route("/<path:filename>")
+def serve_files(filename):
+    return send_from_directory(BASE_DIR, filename)
+
+@app.route("/test")
+def test():
+    return {"message": "Backend working!"}
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+
+
+
+
 # =====================================================
 # FLASK SETUP
 # =====================================================
@@ -37,21 +65,21 @@ def serve_files(filename):
 # =====================================================
 # GOOGLE SHEETS CONFIG
 # =====================================================
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/drive"
-]
+#scope = [
+ #   "https://spreadsheets.google.com/feeds",
+ #   "https://www.googleapis.com/auth/drive"
+#]
 
-if os.environ.get("GOOGLE_CREDENTIALS"):
-    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-else:
-    creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "backend/credentials.json", scope
-    )
+#if os.environ.get("GOOGLE_CREDENTIALS"):
+#    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
+  #  creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+#else:
+  #  creds = ServiceAccountCredentials.from_json_keyfile_name(
+  #      "backend/credentials.json", scope
+  #  )
 
-client = gspread.authorize(creds)
-sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+#client = gspread.authorize(creds)
+#sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
 
 # =====================================================
 # GOOGLE SHEET HEADERS
