@@ -18,28 +18,46 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 
 
+from flask import Flask, send_from_directory, request, jsonify
+from flask_cors import CORS
 import os
-from flask import Flask, send_from_directory
 
-app = Flask(__name__)
+# IMPORTANT — serve frontend from same folder
+app = Flask(__name__, static_folder=".", static_url_path="")
+CORS(app)
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
+# =========================
+# HOME ROUTE (LOAD INDEX)
+# =========================
 @app.route("/")
 def home():
-    return send_from_directory(BASE_DIR, "index.html")
+    return app.send_static_file("index.html")
 
-@app.route("/<path:filename>")
-def serve_files(filename):
-    return send_from_directory(BASE_DIR, filename)
 
+# =========================
+# SERVE ALL FILES
+# =========================
+@app.route("/<path:path>")
+def serve_files(path):
+    return app.send_static_file(path)
+
+
+# =========================
+# TEST BACKEND ROUTE
+# =========================
 @app.route("/test")
 def test():
-    return {"message": "Backend working!"}
+    return jsonify({"status": "Backend Working"})
 
+
+# =========================
+# RUN APP (RENDER PORT)
+# =========================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+
+
 
 
 
@@ -65,21 +83,37 @@ def serve_files(filename):
 # =====================================================
 # GOOGLE SHEETS CONFIG
 # =====================================================
-#scope = [
- #   "https://spreadsheets.google.com/feeds",
- #   "https://www.googleapis.com/auth/drive"
-#]
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
 
-#if os.environ.get("GOOGLE_CREDENTIALS"):
-#    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
-  #  creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-#else:
-  #  creds = ServiceAccountCredentials.from_json_keyfile_name(
-  #      "backend/credentials.json", scope
-  #  )
+sheet = None
 
-#client = gspread.authorize(creds)
-#sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+try:
+    creds_json = os.environ.get("GOOGLE_CREDENTIALS")
+
+    if creds_json:
+        creds_dict = json.loads(creds_json)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        client = gspread.authorize(creds)
+        sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+
+        # ⭐ ADD THIS PART HERE
+        if sheet and not sheet.row_values(1):
+            sheet.append_row([
+                "Name", "Email", "Mobile", "College", "Event",
+                "Amount", "Payment_Status", "Payment_ID",
+                "Registration_ID", "Timestamp"
+            ])
+
+        print("✅ Google Sheets connected successfully")
+
+    else:
+        print("⚠️ GOOGLE_CREDENTIALS not found")
+
+except Exception as e:
+    print("❌ Google Sheets connection failed:", e)
 
 # =====================================================
 # GOOGLE SHEET HEADERS
