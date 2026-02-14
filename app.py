@@ -42,16 +42,16 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-if os.environ.get("GOOGLE_CREDENTIALS"):
+#if os.environ.get("GOOGLE_CREDENTIALS"):
 #    creds_dict = json.loads(os.environ.get("GOOGLE_CREDENTIALS"))
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-else:
-    creds = ServiceAccountCredentials.from_json_keyfile_name(
-        "backend/credentials.json", scope
-    )
+  #  creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+#else:
+  #  creds = ServiceAccountCredentials.from_json_keyfile_name(
+  #      "backend/credentials.json", scope
+  #  )
 
-client = gspread.authorize(creds)
-sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
+#client = gspread.authorize(creds)
+#sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
 
 # =====================================================
 # GOOGLE SHEET HEADERS
