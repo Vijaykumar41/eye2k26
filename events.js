@@ -27,35 +27,33 @@ const data = {
   },
 
 function submitUTR() {
-    const utrNumber = document.getElementById("utrInput").value;
-    const regId = localStorage.getItem("reg_id"); // saved after registration
+  const utr = document.getElementById("utrInput").value.trim();
 
-    if (!utrNumber) {
-        alert("Please enter UTR number");
-        return;
+  if (!/^[0-9]{12}$/.test(utr)) {
+    alert("Please enter valid 12-digit UTR");
+    return;
+  }
+
+  fetch("/submit-utr", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      registration_id: localStorage.getItem("reg_id"),
+      utr: utr
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      alert("Payment submitted successfully! Ticket sent to email.");
+    } else {
+      alert("Error submitting UTR");
     }
+  });
 
-    fetch("/submit-utr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            registration_id: regId,
-            utr: utrNumber
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === "success") {
-            alert("Payment verified! Ticket sent to your email.");
-        } else {
-            alert("Error verifying payment.");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Server error");
-    });
+  closeUTR();
 }
+
 
 
   "Paper Presentation": {
