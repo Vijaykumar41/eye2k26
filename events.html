@@ -17,11 +17,12 @@
 <header class="navbar">
   <div class="logo">EYE2K26</div>
 
-  <div class="hamburger" id="hamburger">
+  <!-- FIXED HAMBURGER -->
+  <div class="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
 
-  <nav class="nav-links" id="navLinks">
+  <nav class="nav-links">
     <a href="index.html">Home</a>
     <a href="events.html" class="active">Events</a>
     <a href="portfolio.html">Portfolio</a>
@@ -49,7 +50,7 @@
 
   <div class="event-card" onclick="openModal('Poster Presentation')">
     <img src="images/posterpresent.jpg">
-    <h3>Poster Presentation</h3>
+    <h3>Power Code</h3>
   </div>
 
   <div class="event-card" onclick="openModal('Workshop')">
@@ -71,6 +72,11 @@
     <img src="images/hacka.png">
     <h3>Hackathon</h3>
   </div>
+
+  <div class="event-card" onclick="openModal('Junk')">
+    <img src="images/hacka.png">
+    <h3>Junk-to-Power</h3>
+  </div>
 </div>
 
 <h2 class="section-title">Non-Technical Events</h2>
@@ -86,6 +92,7 @@
     <h3>Photography</h3>
   </div>
 
+  <!-- FIXED REEL EVENT -->
   <div class="event-card" onclick="openModal('reel')">
     <img src="images/games.jpg">
     <h3>Short Video Challenge</h3>
@@ -100,10 +107,6 @@
     <img src="images/games.jpg">
     <h3>Open Mic</h3>
   </div>
-
-  
-
-
 </div>
 
 </section>
@@ -150,7 +153,8 @@
     <button class="btn" onclick="startPayment()">Proceed to Payment</button>
   </div>
 </div>
-<!-- ================= UPI PAYMENT MODAL ================= -->
+
+<!-- ================= UPI MODAL ================= -->
 <div class="modal" id="upiModal">
   <div class="modal-content center">
     <span class="close" onclick="closeUPI()">&times;</span>
@@ -158,26 +162,12 @@
     <h2 id="upiEvent"></h2>
     <p class="amount">Amount: ₹<span id="upiAmount"></span></p>
 
-    <!-- QR CODE -->
     <canvas id="upiQR"></canvas>
 
-    <!-- CLICKABLE UPI APP IMAGES -->
     <div class="upi-apps">
-      <img src="images/phonepay.png" alt="PhonePe" onclick="openPhonePe()">
-      <img src="images/gpay.png" alt="Google Pay" onclick="openGPay()">
-      <img src="images/paytm.png" alt="Paytm" onclick="openPaytm()">
-    </div>
-
-    <!-- PAYMENT STEPS -->
-    <div class="upi-steps">
-      <h4>How to Pay</h4>
-      <ol>
-        <li>Scan QR or tap a UPI app icon</li>
-        <li>Confirm the amount before paying</li>
-        <li>Complete payment within <b>5 minutes</b></li>
-        <li>Click <b>“I Have Paid”</b> after payment</li>
-        <li>Enter the <b>UTR number</b></li>
-      </ol>
+      <img src="images/phonepay.png" onclick="openPhonePe()">
+      <img src="images/gpay.png" onclick="openGPay()">
+      <img src="images/paytm.png" onclick="openPaytm()">
     </div>
 
     <p id="upiTimer">05:00</p>
@@ -186,14 +176,12 @@
   </div>
 </div>
 
-
 <!-- ================= UTR MODAL ================= -->
 <div class="modal" id="utrModal">
   <div class="modal-content center">
     <span class="close" onclick="closeUTR()">&times;</span>
 
     <h2>Enter UTR Number</h2>
-    <p>After completing the payment, enter the UTR number below</p>
 
     <input type="text" id="utrInput" placeholder="Enter 12-digit UTR">
 
@@ -201,11 +189,13 @@
   </div>
 </div>
 
-
 <footer>
   © 2026 EYE2K26 | Department of EEE
 </footer>
 
+<!-- IMPORTANT SCRIPTS -->
+<script src="script.js"></script>
 <script src="events.js"></script>
+
 </body>
 </html>

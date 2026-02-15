@@ -1,231 +1,78 @@
 /* =====================================================
-   EVENT DATA
+   GLOBAL VARIABLES
 ===================================================== */
+let selectedEvent = "";
+let regId = "";
+let upiInterval = null;
+
 let currentUPI = {
   phonepe: "",
   gpay: "",
   paytm: ""
 };
 
-
+/* =====================================================
+   EVENT DATA
+===================================================== */
 const data = {
 
-  "Project Expo": {
-    desc: "Showcase innovative electrical and electronics projects with working models and prototypes.",
-    rules: [
-      "Maximum 4 members per team",
-      "Working model or prototype mandatory",
-      "One team per college"
-    ],
-    fee: 10,
-    p1: 3000,
-    p2: 1500,
-    coords: [
-      "B Karthik – 8019239711",
-      "S Mehaboob Basha – 8897327514"
-    ]
-  },
+  "Project Expo": { fee: 10, desc:"Showcase innovative projects", rules:["Max 4 members","only"], p1:3000, p2:1500, coords:["Coordinator"] },
+  "Paper Presentation": { fee:500, desc:"Present research ideas", rules:["Max 2 members"], p1:2000, p2:1000, coords:["Coordinator"] },
+  "Poster Presentation": { fee:400, desc:"Visual idea presentation", rules:["Original content"], p1:1500, p2:800, coords:["Coordinator"] },
+  "Workshop": { fee:600, desc:"Hands-on workshop", rules:["Individual"], p1:0, p2:0, coords:["Coordinator"] },
+  "Circuit Hunt": { fee:300, desc:"Solve circuit puzzles", rules:["Team of 2"], p1:1500, p2:800, coords:["Coordinator"] },
+  "Technical Quiz": { fee:300, desc:"EEE knowledge test", rules:["Team of 2"], p1:1200, p2:600, coords:["Coordinator"] },
+  "Hackathon": { fee:1000, desc:"24-hour coding challenge", rules:["Team upto 4"], p1:5000, p2:2500, coords:["Coordinator"] },
 
-  "Paper Presentation": {
-    desc: "Present your research ideas related to Electrical and Power Systems.",
-    rules: [
-      "Maximum 2 authors per paper",
-      "IEEE format mandatory",
-      "8 minutes presentation + 2 minutes Q&A"
-    ],
-    fee: 500,
-    p1: 2000,
-    p2: 1000,
-    coords: [
-      "P Kavya Sree – 8096990897"
-    ]
-  },
+  "Photography": { fee:200, desc:"Capture creative moments", rules:["Original photo"], p1:2500, p2:800, coords:["Coordinator"] },
+  "Chess": { fee:300, desc:"Strategy game", rules:["Individual"], p1:3400, p2:900, coords:["Coordinator"] },
+  "Drawing": { fee:300, desc:"Show artistic skills", rules:["Individual"], p1:3000, p2:1000, coords:["Coordinator"] },
 
-  "Poster Presentation": {
-    desc: "Visually present innovative technical concepts and ideas.",
-    rules: [
-      "Poster size A1 only",
-      "Original content required",
-      "One poster per team"
-    ],
-    fee: 400,
-    p1: 1500,
-    p2: 800,
-    coords: [
-      "K Varshitha – 7396759396"
-    ]
-  },
-
-  "Workshop": {
-    desc: "Hands-on technical workshop conducted by industry experts.",
-    rules: [
-      "Individual participation",
-      "Laptop compulsory",
-      "Limited seats available"
-    ],
-    fee: 600,
-    p1: 0,
-    p2: 0,
-    coords: [
-      "A Sai Teja – 9876543210"
-    ]
-  },
-
-  "Circuit Hunt": {
-    desc: "Solve electrical circuits and puzzles under time pressure.",
-    rules: [
-      "Team of 2 members",
-      "Multiple elimination rounds",
-      "Basic circuit knowledge required"
-    ],
-    fee: 300,
-    p1: 1500,
-    p2: 800,
-    coords: [
-      "N Rohith – 9123456780"
-    ]
-  },
-
-  "Technical Quiz": {
-    desc: "Test your Electrical & Electronics Engineering knowledge.",
-    rules: [
-      "Team of 2 members",
-      "MCQ + Rapid fire rounds",
-      "Decision of judges is final"
-    ],
-    fee: 300,
-    p1: 1200,
-    p2: 600,
-    coords: [
-      "M Keerthana – 9988776655"
-    ]
-  },
-
-  "Hackathon": {
-    desc: "24-hour innovation challenge to solve real-world problems.",
-    rules: [
-      "Team of 1 to 4 members",
-      "Problem statement given on spot",
-      "Bring your own laptops"
-    ],
-    fee: 1000,
-    p1: 5000,
-    p2: 2500,
-    coords: [
-      "S Sai Kumar – 9876501234"
-    ]
-  },
-
-  "open": {
-    desc: "Showcase your talent in singing, poetry, comedy, or storytelling on the open stage",
-    rules: [
-      "Individual participation only.",
-      "Participants can perform singing, poetry, storytelling, stand-up comedy, or any creative act.",
-      "Vulgar, offensive, or inappropriate content is strictly prohibited",
-      "Judges’ decision will be final and binding."
-    ],
+  /* FIXED EVENT */
+  "reel": {
     fee: 200,
+    desc: "Create and submit a short creative video",
+    rules: ["Max duration 60 sec", "Original content only"],
     p1: 2500,
     p2: 800,
-    coords: [
-      "R Harsha – 9000011111"
-    ]
+    coords: ["Coordinator"]
   },
 
-  "Photography": {
-    desc: "Capture creative moments during the fest.",
-    rules: [
-      "One photo per participant",
-      "Original photo only",
-      "Basic editing allowed"
-    ],
-    fee: 200,
-    p1: 2500,
-    p2: 800,
-    coords: [
-      "Student Coordinators"
-    ]
-  },
-
-  "Chess": {
-    desc: "Test your strategic thinking and tactical skills in an intense battle of minds. Compete against fellow participants and prove your mastery in the ultimate game of strategy.",
-    rules: [
-      "The tournament will follow a knockout / Swiss format (based on number of participants).",
-      "Each player will be given a fixed time limit (e.g., 10 minutes per player)",
-      "Standard FIDE rules will be followed",
-      "Decision of the organizers/judges will be final"
-    ],
-    fee: 300,
-    p1: 3400,
-    p2: 900,
-    coords: [
-      "Student Coordinators"
-    ]
-  },
-   "reel": {
-    desc: "Exciting fun and team-based games.",
-    rules: [
-      "On-spot registration",
-      "Rules explained at venue"
-    ],
-    fee: 0,
-    p1: 500,
-    p2: 200,
-    coords: [
-      "Student Coordinators"
-    ]
-  },
-  "Drawing": {
-    desc: "Express your imagination and creativity through colors and art. Showcase your artistic skills and bring your ideas to life on canvas during the fest..",
-    rules: [
-      "Individual participation only.",
-      "Only original artwork is allowed.",
-      "Any form of tracing or copying is strictly prohibited.",
-      "Judges’ decision will be final and binding."
-    ],
-    fee: 300,
-    p1: 3000,
-    p2: 1000,
-    coords: [
-      "Student Coordinators"
-    ]
-  },
+  "open": { fee:200, desc:"Open mic stage", rules:["Individual"], p1:2500, p2:800, coords:["Coordinator"] }
 
 };
 
-/* =====================================================
-   GLOBALS
-===================================================== */
-let selectedEvent = "";
-let upiInterval = null;
 
 /* =====================================================
-   EVENT DETAILS MODAL
+   EVENT MODAL
 ===================================================== */
 function openModal(name) {
+
+  if (!data[name]) {
+    alert("Event data not found!");
+    return;
+  }
+
   selectedEvent = name;
-  const e = data[name];
+  const event = data[name];
 
   document.getElementById("eventTitle").innerText = name;
-  document.getElementById("eventDesc").innerText = e.desc;
-  document.getElementById("eventFee").innerText = e.fee;
-  document.getElementById("p1").innerText = e.p1;
-  document.getElementById("p2").innerText = e.p2;
+  document.getElementById("eventDesc").innerText = event.desc;
+  document.getElementById("eventFee").innerText = event.fee;
+
+  document.getElementById("p1").innerText = event.p1;
+  document.getElementById("p2").innerText = event.p2;
 
   const rulesList = document.getElementById("eventRules");
   rulesList.innerHTML = "";
-  e.rules.forEach(rule => {
-    const li = document.createElement("li");
-    li.textContent = rule;
-    rulesList.appendChild(li);
+  event.rules.forEach(rule => {
+    rulesList.innerHTML += `<li>${rule}</li>`;
   });
 
   const coordList = document.getElementById("eventCoordinators");
   coordList.innerHTML = "";
-  e.coords.forEach(coord => {
-    const li = document.createElement("li");
-    li.textContent = coord;
-    coordList.appendChild(li);
+  event.coords.forEach(coord => {
+    coordList.innerHTML += `<li>${coord}</li>`;
   });
 
   document.getElementById("eventModal").style.display = "flex";
@@ -235,8 +82,9 @@ function closeModal() {
   document.getElementById("eventModal").style.display = "none";
 }
 
+
 /* =====================================================
-   REGISTRATION MODAL
+   REGISTER MODAL
 ===================================================== */
 function openRegister() {
   document.getElementById("regEvent").innerText = selectedEvent;
@@ -248,29 +96,41 @@ function closeRegister() {
   document.getElementById("registerModal").style.display = "none";
 }
 
+
 /* =====================================================
-   UPI PAYMENT
+   START PAYMENT
 ===================================================== */
 function startPayment() {
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
-  const college = document.getElementById("college").value.trim();
   const mobile = document.getElementById("mobile").value.trim();
+  const college = document.getElementById("college").value.trim();
 
-  if (!name || !email || !college || !mobile) {
-    alert("Kurapati Vijay Kumar");
+  if (!name || !email || !mobile || !college) {
+    alert("Please fill all fields");
     return;
   }
-  if (!isValidEmail(email)) {
-  alert("vijaykumar5127865@gmail.com");
-  return;
+
+  openUPI();
+
+  fetch("/register", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ name,email,mobile,college,event:selectedEvent })
+  })
+  .then(res => res.json())
+  .then(data => {
+    regId = data.id;
+    localStorage.setItem("reg_id", regId);
+  });
 }
 
-if (!/^[6-9][0-9]{9}$/.test(mobile)) {
-  alert("8688753307r");
-  return;
-}
+
+/* =====================================================
+   OPEN UPI PAYMENT
+===================================================== */
+function openUPI() {
 
   closeRegister();
 
@@ -280,61 +140,46 @@ if (!/^[6-9][0-9]{9}$/.test(mobile)) {
   document.getElementById("upiAmount").innerText = amount;
   document.getElementById("upiModal").style.display = "flex";
 
-  const upiID = "vijaykumar5127865@okhdfcbank"; // 🔴 CHANGE THIS
-  const note = `${selectedEvent} - ${name}`;
+  const upiID = "vijaykumar5127865@okhdfcbank";
+  const note = selectedEvent;
 
   const upiURL =
-    `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+   `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${note}`;
 
   new QRious({
-  element: document.getElementById("upiQR"),
-  value: upiURL,
-  size: 220
-});
+    element: document.getElementById("upiQR"),
+    value: upiURL,
+    size: 220
+  });
 
-/* ================= STORE UPI DEEP LINKS ================= */
+  currentUPI.phonepe = upiURL;
+  currentUPI.gpay = upiURL;
+  currentUPI.paytm = upiURL;
 
-// Universal official UPI link (works for all apps without warning)
-const universalUPI =
-  `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-currentUPI.phonepe = universalUPI;
-currentUPI.gpay = universalUPI;
-currentUPI.paytm = universalUPI;
-
-/* ================= STORE UPI DEEP LINKS ================= */
-currentUPI.phonepe =
-  `phonepe://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-currentUPI.gpay =
-  `tez://upi/pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-currentUPI.paytm =
-  `paytmmp://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-startUPITimer();
-
+  startTimer();
 }
 
-function startUPITimer() {
+
+/* =====================================================
+   TIMER
+===================================================== */
+function startTimer() {
   let time = 300;
   clearInterval(upiInterval);
 
   upiInterval = setInterval(() => {
-    let min = Math.floor(time / 60);
-    let sec = time % 60;
+    let min = Math.floor(time/60);
+    let sec = time%60;
 
     document.getElementById("upiTimer").innerText =
-      `${min}:${sec < 10 ? "0" : ""}${sec}`;
+      `${min}:${sec<10?"0":""}${sec}`;
 
-    time--;
-
-    if (time < 0) {
+    if(time-- <= 0){
       clearInterval(upiInterval);
-      alert("UPI QR expired. Please try again.");
       closeUPI();
+      alert("Payment expired");
     }
-  }, 1000);
+  },1000);
 }
 
 function closeUPI() {
@@ -344,86 +189,47 @@ function closeUPI() {
 
 
 /* =====================================================
-   UTR MODAL
+   UTR
 ===================================================== */
 function paymentDone() {
-  clearInterval(upiInterval);
   closeUPI();
   document.getElementById("utrModal").style.display = "flex";
 }
 
+function closeUTR() {
+  document.getElementById("utrModal").style.display = "none";
+}
+
 function submitUTR() {
+
   const utr = document.getElementById("utrInput").value.trim();
 
-  if (!/^[0-9]{12}$/.test(utr)) {
-    alert("Please enter a valid 12-digit UTR number");
+  if(!/^[0-9]{12}$/.test(utr)){
+    alert("Enter valid 12-digit UTR");
     return;
   }
 
-  fetch("/register", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
+  fetch("/submit-utr",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
-      name: document.getElementById("name").value,
-      email: document.getElementById("email").value,
-      college: document.getElementById("college").value,
-      mobile: document.getElementById("mobile").value,
-      event: selectedEvent,
-      utr: utr
+      registration_id: localStorage.getItem("reg_id"),
+      utr
     })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.status==="success"){
+      alert("Payment submitted!");
+      closeUTR();
+    }
   });
-
-  alert("UTR submitted successfully!");
-  closeUTR();
 }
 
-
-function closeUTR() {
-  document.getElementById("utrModal").style.display = "none";
-  document.getElementById("utrInput").value = "";
-}
 
 /* =====================================================
-   HAMBURGER MENU
+   UPI BUTTONS
 ===================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.getElementById("hamburger");
-  const navLinks = document.getElementById("navLinks");
-
-  if (!hamburger || !navLinks) return;
-
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-    hamburger.classList.toggle("active");
-  });
-
-  navLinks.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("active");
-      hamburger.classList.remove("active");
-    });
-  });
-});
-
-
-function isValidEmail(email) {
-  const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return emailRegex.test(email);
-}
-
-
-function openPhonePe() {
-  if (!currentUPI.phonepe) return;
-  window.location.href = currentUPI.phonepe;
-}
-
-function openGPay() {
-  if (!currentUPI.gpay) return;
-  window.location.href = currentUPI.gpay;
-}
-
-function openPaytm() {
-  if (!currentUPI.paytm) return;
-  window.location.href = currentUPI.paytm;
-}
+function openPhonePe(){ window.location.href=currentUPI.phonepe; }
+function openGPay(){ window.location.href=currentUPI.gpay; }
+function openPaytm(){ window.location.href=currentUPI.paytm; }

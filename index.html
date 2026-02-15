@@ -4,20 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EYE2K26 | Electrify Your Education</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+
+<style>
+/* ================= SPONSORS ================= */
+
+.sponsor-slider {
+  margin-top: 40px;
+  overflow: hidden;
+}
+
+.sponsor-track {
+  display: flex;
+  gap: 60px;
+  width: max-content;
+  animation: sponsorMove 25s linear infinite;
+  align-items: center;
+}
+
+.sponsor-track img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: white;
+  padding: 15px;
+  box-shadow: 0 0 25px rgba(56,189,248,0.4);
+}
+
+@keyframes sponsorMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+</style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+<canvas id="particleCanvas"></canvas>
+
 <header class="navbar">
   <div class="logo">EYE2K26</div>
-
   <div class="hamburger" id="hamburger">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </div>
 
   <nav class="nav-links" id="navLinks">
@@ -30,95 +61,108 @@
   </nav>
 </header>
 
-<!-- ================= CIRCUIT BACKGROUND ================= -->
-<svg class="circuit-overlay" viewBox="0 0 1000 600" preserveAspectRatio="none">
-  <path class="circuit-line" d="M50 100 H300 V200 H600 V350 H900"/>
-  <path class="circuit-line" d="M100 500 V300 H400 V150 H700"/>
-  <circle class="circuit-node" cx="300" cy="200" r="4"/>
-  <circle class="circuit-node" cx="600" cy="350" r="4"/>
-  <circle class="circuit-node" cx="400" cy="150" r="4"/>
-</svg>
-
 <!-- ================= HERO ================= -->
 
+<section class="hero ultra-hero">
 
-<section class="hero">
+  <h1 class="glow-title">EYE2K26</h1>
 
-  <h1>EYE2K26</h1>
-  <h4>Electrify Your Education</h4>
-  <p>National Level Technical Symposium – Department of EEE</p>
+  <h2 class="typing-text">Electrify⚡Your⚡Education </h2>
 
-  <img src="images/eye2k26ima (1).png" class="fest-logo" alt="EYE2K26 Logo">
+  <p class="hero-sub">
+    National Level Technical Symposium – Department of EEE
+  </p>
 
-  <a href="events.html" class="btn">Explore Events</a>
+  <img src="images/eye2k26ima (1).png" class="fest-logo">
 
-  <div class="hero-info">
-    <p>📅 <b>24 – 25 March 2026</b></p>
-    <p>Department of Electrical and Elctronics Engineering</p>
-    <p>📍 JNTUA College of Engineering, Ananthapuramu</p>
-  </div>
+  <a href="events.html" class="pro-btn">Explore Events</a>
 
-  <!-- COUNTDOWN -->
   <div class="countdown">
-    <div><span id="days">00</span><small>DAYS</small></div>
-    <div><span id="hours">00</span><small>HOURS</small></div>
-    <div><span id="minutes">00</span><small>MINUTES</small></div>
-    <div><span id="seconds">00</span><small>SECONDS</small></div>
-  </div>
-
-  <!-- HIGHLIGHTS -->
-  <div class="hero-highlights">
-    <span>🏆 Prizes</span>
-    <span>📜 Certificates</span>
-    <span>🤝 Networking</span>
+    <div class="flip"><span id="days">00</span><small>DAYS</small></div>
+    <div class="flip"><span id="hours">00</span><small>HOURS</small></div>
+    <div class="flip"><span id="minutes">00</span><small>MINUTES</small></div>
+    <div class="flip"><span id="seconds">00</span><small>SECONDS</small></div>
   </div>
 
 </section>
 
-<!-- ================= HIGHLIGHT SESSIONS ================= -->
+<!-- ================= HIGHLIGHT SLIDER ================= -->
+
 <section class="section fade">
   <h2 class="highlight-title">Highlight Sessions</h2>
 
-  <div class="highlight-wrapper">
-    <button class="nav-btn left" onclick="prevSession()">❮</button>
+  <div class="pro-slider">
 
-    <div class="highlight-card">
-      <img id="sessionImg" src="images/circuithunt.png" alt="Session Image">
-      <div class="highlight-content">
-        <span class="highlight-tag">SESSION</span>
-        <h3 id="sessionTitle">Theme Expo</h3>
-        <p class="date" id="sessionDate">📅 24 March 2026</p>
-        <p class="desc" id="sessionDesc">
-          Showcasing innovative ideas and prototypes in EEE.
-        </p>
+    <div class="slide active">
+      <img src="images/theme.png">
+      <div class="slide-content">
+        <h3>Theme Expo</h3>
+        <p>Showcasing innovative electrical projects and ideas.</p>
       </div>
-
-      
     </div>
 
-    <button class="nav-btn right" onclick="nextSession()">❯</button>
+    <div class="slide">
+      <img src="images/session2.jpg">
+      <div class="slide-content">
+        <h3>Technical Workshops</h3>
+        <p>Hands-on training sessions by industry experts.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images/technical.jpg">
+      <div class="slide-content">
+        <h3>Technical Events</h3>
+        <p>Showcase your innovation, technical skills, and problem-solving abilities through exciting engineering challenges.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images/session2.jpg">
+      <div class="slide-content">
+        <h3>Non Technical Workshops</h3>
+        <p>Unleash your creativity, confidence, and teamwork through fun and engaging activities.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images\hackathon.jpg">
+      <div class="slide-content">
+        <h3>Hackathon</h3>
+        <p>Innovate, collaborate, and build real-world solutions in an intense coding challenge.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images/culture.png">
+      <div class="slide-content">
+        <h3>Cultural Events</h3>
+        <p>Innovate, collaborate, and build real-world solutions in an intense coding challenge.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images/flash.jpg">
+      <div class="slide-content">
+        <h3>Flashmob</h3>
+        <p>Experience high-energy synchronized dance performances that ignite excitement and showcase team spirit.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="images/session2.jpg">
+      <div class="slide-content">
+        <h3>Ethinic Wear</h3>
+        <p>Celebrate tradition and culture by presenting elegant and vibrant traditional attire with confidence.</p>
+      </div>
+    </div>
+
+    <button class="slide-btn left" onclick="prevSlide()">❮</button>
+    <button class="slide-btn right" onclick="nextSlide()">❯</button>
+
   </div>
 </section>
 
-<!-- ================= PAST EVENTS ================= -->
-<section class="section fade">
-  <h2 style="text-align:center">Past Events Highlights</h2>
-
-  <div class="past-slider">
-    <div class="past-track">
-      <img src="images/past1.jpg">
-      <img src="images/past2.jpg">
-      <img src="images/past3.jpg">
-      <img src="images/past4.jpg">
-
-      <!-- duplicate -->
-      <img src="images/past1.jpg">
-      <img src="images/past2.jpg">
-      <img src="images/past3.jpg">
-      <img src="images/past4.jpg">
-    </div>
-  </div>
-</section>
 
 <!-- ================= ABOUT FEST ================= -->
 <section class="section fade">
@@ -163,12 +207,13 @@ JNTUA College of Engineering, Ananthapuramu stands aloft on a solid foundation o
 
 
 <footer>
-  <p>© 2026 EYE2K26 | Department of EEE, JNTUA CEA</p>
+  <p>© 2026 EYE2K26 | Department of EEE</p>
 </footer>
 
+<!-- ================= JS ================= -->
 
 <script>
-/* ================= SCROLL FADE ================= */
+/* SCROLL FADE */
 document.addEventListener("scroll", () => {
   document.querySelectorAll(".fade").forEach(el => {
     if (el.getBoundingClientRect().top < window.innerHeight - 100) {
@@ -177,113 +222,69 @@ document.addEventListener("scroll", () => {
   });
 });
 
+/* ===== PRO SLIDER JS ===== */
 
-/* ================= HIGHLIGHT SESSION SLIDER ================= */
+let slideIndex = 0;
 
-const sessions = [
-  {
-    title: "Technical Events",
-    tag: "TECHNICAL",
-    date: "📅 05 – 06 March 2026",
-    desc: "Project Expo, Paper Presentation, Poster Presentation, Circuit Hunt, Technical Quiz.",
-    img: "images/techni.png"
-  },
-  {
-    title: "Non-Technical Events",
-    tag: "NON-TECH",
-    date: "📅 05 – 06 March 2026",
-    desc: "Treasure Hunt, Photography, Fun & Interactive activities.",
-    img: "images/nontechni.png"
-  },
-  {
-    title: "Hackathon",
-    tag: "INNOVATION",
-    date: "📅 05 March 2026",
-    desc: "24-hour innovation challenge solving real-world electrical problems.",
-    img: "images/technical events.png"
-  },
-  {
-    title: "Cultural Events",
-    tag: "CULTURAL",
-    date: "📅 06 March 2026",
-    desc: "Music, Dance, Performances and Celebration Night.",
-    img: "images/culture.jpg"
-  },
-  {
-    title: "Fun Games",
-    tag: "ENTERTAINMENT",
-    date: "📅 23,24,25 March 2026",
-    desc: "Team games, challenges, and exciting spot events.",
-    img: "images/games.jpg"
-  },
-  {
-    title: "Flashmob",
-    tag: "SPECIAL",
-    date: "📅 24 March 2026",
-    desc: "High-energy flashmob performance by students.",
-    img: "images/flashmob.png"
-  },
-  {
-    title: "Ethnic Wear",
-    tag: "SPECIAL",
-    date: "📅 25 March 2026",
-    desc: "High-energy Traditional wear in the Department.",
-    img: "images/flashmob.jpg"
+function showSlide(index) {
+  const slides = document.querySelectorAll(".slide");
+  slides.forEach(s => s.classList.remove("active"));
+  slides[index].classList.add("active");
+}
+
+function nextSlide() {
+  const slides = document.querySelectorAll(".slide");
+  slideIndex = (slideIndex + 1) % slides.length;
+  showSlide(slideIndex);
+}
+
+function prevSlide() {
+  const slides = document.querySelectorAll(".slide");
+  slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+  showSlide(slideIndex);
+}
+
+setInterval(nextSlide, 5000);
+
+/* HAMBURGER */
+document.getElementById("hamburger").onclick = () => {
+  document.getElementById("navLinks").classList.toggle("active");
+};
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const eventDate = new Date("March 24, 2026 10:00:00").getTime();
+
+  const days = document.getElementById("days");
+  const hours = document.getElementById("hours");
+  const minutes = document.getElementById("minutes");
+  const seconds = document.getElementById("seconds");
+
+  function updateCountdown() {
+
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+
+    if (diff <= 0) {
+      document.querySelector(".countdown").innerHTML =
+        "<h2 style='color:#00eaff'>⚡ EVENT STARTED ⚡</h2>";
+      return;
+    }
+
+    days.innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+    hours.innerText = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    minutes.innerText = Math.floor((diff / (1000 * 60)) % 60);
+    seconds.innerText = Math.floor((diff / 1000) % 60);
   }
-];
 
-let currentSession = 0;
+  updateCountdown(); // run immediately
+  setInterval(updateCountdown, 1000);
 
-function renderSession() {
-  const s = sessions[currentSession];
-
-  document.getElementById("sessionImg").src = s.img;
-  document.getElementById("sessionTitle").innerText = s.title;
-  document.getElementById("sessionDesc").innerText = s.desc;
-  document.getElementById("sessionDate").innerText = s.date;
-
-  const tagEl = document.getElementById("sessionTag");
-  if (tagEl) tagEl.innerText = s.tag;
-}
-
-function nextSession() {
-  currentSession = (currentSession + 1) % sessions.length;
-  renderSession();
-}
-
-function prevSession() {
-  currentSession = (currentSession - 1 + sessions.length) % sessions.length;
-  renderSession();
-}
-
-/* Auto-slide every 5 seconds */
-setInterval(nextSession, 5000);
-
-
-/* ================= HAMBURGER MENU ================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.getElementById("hamburger");
-  const navLinks = document.getElementById("navLinks");
-
-  hamburger.addEventListener("click", () => {
-    navLinks.classList.toggle("active");
-    hamburger.classList.toggle("active");
-  });
-
-  navLinks.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("active");
-      hamburger.classList.remove("active");
-    });
-  });
-
-  renderSession(); // load first session
 });
-</script>
 
-<script src="script.js"></script>
-</body>
+
+</script>
 
 </body>
 </html>

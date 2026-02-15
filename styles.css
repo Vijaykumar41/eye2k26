@@ -2096,3 +2096,205 @@ canvas{
   0% { transform: scale(0.9); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+
+
+/* ===== PRO SESSION SLIDER ===== */
+
+.pro-slider {
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 25px;
+  box-shadow: 0 0 50px rgba(56,189,248,0.5);
+}
+
+.slides {
+  position: relative;
+}
+
+/* SLIDE BASE */
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.slide.active {
+  opacity: 1;
+  position: relative;
+}
+
+/* IMAGE LAYER */
+.slide img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  position: relative;
+  z-index: 0;
+}
+
+/* DARK OVERLAY LAYER */
+.slide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65); /* controls darkness */
+  z-index: 1;
+}
+
+/* TEXT LAYER — ALWAYS BRIGHT */
+.slide-content {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 2;   /* ABOVE OVERLAY */
+  padding: 15px 25px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.35);
+}
+
+/* BRIGHT GLOW TITLE */
+.slide-content h3 {
+  font-size: 32px;
+  color: #38bdf8;
+  text-shadow:
+    0 0 10px #38bdf8,
+    0 0 20px #38bdf8,
+    0 0 30px #38bdf8;
+}
+
+/* BRIGHT DESCRIPTION */
+.slide-content p {
+  font-size: 16px;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.8);
+}
+
+/* ARROWS */
+.slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,.6);
+  border: none;
+  color: white;
+  font-size: 30px;
+  padding: 10px 18px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.slide-btn.left { left: 15px; }
+.slide-btn.right { right: 15px; }
+
+/* DOTS */
+.dots {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 6px;
+  background: gray;
+  display: inline-block;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #38bdf8;
+}
+
+/* ===== ULTRA HERO ===== */
+
+.ultra-hero {
+  position: relative;
+  text-align: center;
+  padding-top: 160px;
+}
+
+.glow-title {
+  font-size: 70px;
+  color: #00eaff;
+  text-shadow:
+    0 0 20px #00eaff,
+    0 0 40px #00eaff,
+    0 0 80px #00eaff;
+  animation: glowPulse 3s infinite;
+}
+
+@keyframes glowPulse {
+  50% { text-shadow: 0 0 40px #a855f7; }
+}
+
+.typing-text {
+  margin-top: 10px;
+  font-size: 28px;
+  color: #fff;
+  border-right: 3px solid #00eaff;
+  width: fit-content;
+  margin-inline: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 4s steps(30), blink .8s infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 320px }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+.pro-btn {
+  margin-top: 25px;
+  display: inline-block;
+  padding: 15px 35px;
+  border-radius: 40px;
+  background: linear-gradient(90deg,#00eaff,#a855f7);
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 0 25px #00eaff;
+  transition: .4s;
+}
+
+.pro-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 50px #a855f7;
+}
+
+/* ===== FLIP COUNTDOWN ===== */
+
+.flip {
+  background: rgba(0,234,255,.08);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #00eaff;
+}
+
+.flip span {
+  font-size: 35px;
+  font-weight: bold;
+  display: block;
+  color: #00eaff;
+}
+
+/* ===== PARTICLE BACKGROUND ===== */
+
+#particleCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+}
+
+
+
+
