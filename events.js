@@ -301,6 +301,24 @@ if (!/^[6-9][0-9]{9}$/.test(mobile)) {
   alert("8688753307r");
   return;
 }
+   /* 🔴 REGISTER USER IN DATABASE FIRST */
+  fetch("/register", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name,
+      email,
+      college,
+      mobile,
+      event: selectedEvent
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    localStorage.setItem("reg_id", data.id);
+    console.log("Saved Registration ID:", data.id);
+  });
+
 
   closeRegister();
 
