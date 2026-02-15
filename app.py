@@ -100,6 +100,9 @@ def generate_ticket(data):
 
 def send_email(to_email, subject, body, pdf_path):
     try:
+        print("EMAIL USER:", EMAIL_ADDRESS)
+        print("EMAIL PASS EXISTS:", EMAIL_PASSWORD is not None)
+
         msg = MIMEMultipart()
         msg["From"] = EMAIL_ADDRESS
         msg["To"] = to_email
@@ -107,16 +110,12 @@ def send_email(to_email, subject, body, pdf_path):
 
         msg.attach(MIMEText(body, "html"))
 
-        # Attach PDF
         with open(pdf_path, "rb") as f:
             part = MIMEBase("application", "octet-stream")
             part.set_payload(f.read())
 
         encoders.encode_base64(part)
-        part.add_header(
-            "Content-Disposition",
-            f'attachment; filename="{os.path.basename(pdf_path)}"'
-        )
+        part.add_header("Content-Disposition", f'attachment; filename="{os.path.basename(pdf_path)}"')
         msg.attach(part)
 
         server = smtplib.SMTP("smtp.gmail.com", 587)
@@ -125,10 +124,11 @@ def send_email(to_email, subject, body, pdf_path):
         server.send_message(msg)
         server.quit()
 
-        print("✅ Email sent successfully")
+        print("✅ EMAIL SENT SUCCESS")
 
     except Exception as e:
-        print("❌ Email failed:", e)
+        print("❌ EMAIL ERROR:", e)
+
 
 
 # ==============================
