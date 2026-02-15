@@ -67,7 +67,7 @@
 
   <h1 class="glow-title">EYE2K26</h1>
 
-  <h2 class="typing-text">Electrify⚡Your⚡Education </h2>
+  <h3 class="typing-text">Electrify⚡Your⚡Education </h3>
 
   <p class="hero-sub">
     National Level Technical Symposium – Department of EEE
@@ -282,7 +282,120 @@ document.addEventListener("DOMContentLoaded", function () {
   setInterval(updateCountdown, 1000);
 
 });
+/* ===== HAMBURGER TOGGLE ===== */
 
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("navLinks");
+
+hamburger.onclick = () => {
+  hamburger.classList.toggle("active");
+  navLinks.classList.toggle("active");
+};
+
+/* ===== NAVBAR SHRINK ON SCROLL ===== */
+
+window.addEventListener("scroll", () => {
+  document.querySelector(".navbar").classList.toggle(
+    "shrink",
+    window.scrollY > 50
+  );
+});
+
+
+
+/* ===== DARK EEE NETWORK BACKGROUND ===== */
+
+/* ===== DARK EEE NETWORK BACKGROUND ===== */
+
+/* ===== ULTIMATE EEE CIRCUIT BACKGROUND (SAFE VERSION) ===== */
+
+const bgCanvas = document.getElementById("particleCanvas");
+
+if (bgCanvas) {
+  const bgCtx = bgCanvas.getContext("2d");
+
+  let nodes = [];
+  let pulses = [];
+
+  function resizeCanvas() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  // Create nodes
+  for (let i = 0; i < 70; i++) {
+    nodes.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3
+    });
+  }
+
+  function drawBackground() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        let dx = nodes[i].x - nodes[j].x;
+        let dy = nodes[i].y - nodes[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 140) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(nodes[i].x, nodes[i].y);
+          bgCtx.lineTo(nodes[j].x, nodes[j].y);
+          bgCtx.strokeStyle = "rgba(56,189,248,0.12)";
+          bgCtx.lineWidth = 1;
+          bgCtx.stroke();
+
+          // Random electric pulse
+          if (Math.random() < 0.002) {
+            pulses.push({
+              x: nodes[i].x,
+              y: nodes[i].y,
+              life: 40
+            });
+          }
+        }
+      }
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      bgCtx.beginPath();
+      bgCtx.arc(n.x, n.y, 2.5, 0, Math.PI * 2);
+      bgCtx.fillStyle = "#38bdf8";
+      bgCtx.fill();
+
+      n.x += n.vx;
+      n.y += n.vy;
+
+      if (n.x < 0 || n.x > bgCanvas.width) n.vx *= -1;
+      if (n.y < 0 || n.y > bgCanvas.height) n.vy *= -1;
+    });
+
+    // Draw pulses
+    pulses.forEach((p, i) => {
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, 6 - p.life * 0.1, 0, Math.PI * 2);
+      bgCtx.strokeStyle = `rgba(56,189,248,${p.life / 40})`;
+      bgCtx.lineWidth = 2;
+      bgCtx.stroke();
+
+      p.life--;
+      if (p.life <= 0) pulses.splice(i, 1);
+    });
+
+    requestAnimationFrame(drawBackground);
+  }
+
+  drawBackground();
+}
 
 </script>
 

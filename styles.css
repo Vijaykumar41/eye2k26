@@ -2295,6 +2295,23 @@ canvas{
   z-index: -2;
 }
 
+@media (max-width: 768px) {
+
+  .flip {
+    width: 60px;      /* was bigger */
+    padding: 8px;
+  }
+
+  .flip span {
+    font-size: 20px;  /* slightly smaller */
+  }
+
+  .flip small {
+    font-size: 9px;
+  }
+
+}
+
 
 
 
