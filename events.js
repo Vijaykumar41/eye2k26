@@ -15,18 +15,21 @@ let currentUPI = {
    EVENT DATA
 ===================================================== */
 const data = {
-  "Project Expo": { fee: 10, desc: "Showcase innovative projects." },
-  "Paper Presentation": { fee: 500, desc: "Present research ideas." },
-  "Poster Presentation": { fee: 400, desc: "Visual idea display." },
-  "Workshop": { fee: 600, desc: "Hands-on learning." },
-  "Circuit Hunt": { fee: 300, desc: "Solve circuit puzzles." },
-  "Technical Quiz": { fee: 300, desc: "Test EEE knowledge." },
-  "Hackathon": { fee: 1000, desc: "24-hour coding challenge." },
-  "Drawing": { fee: 300, desc: "Creative art competition." },
-  "Photography": { fee: 200, desc: "Capture moments." },
-  "Chess": { fee: 300, desc: "Strategic battle." },
-  "open": { fee: 200, desc: "Open mic talent show." }
+
+  "Project Expo": { fee: 10, desc:"Showcase innovative projects", rules:["Max 4 members"], p1:3000, p2:1500, coords:["Coordinator"] },
+  "Paper Presentation": { fee:500, desc:"Present research ideas", rules:["Max 2 members"], p1:2000, p2:1000, coords:["Coordinator"] },
+  "Poster Presentation": { fee:400, desc:"Visual idea presentation", rules:["Original content"], p1:1500, p2:800, coords:["Coordinator"] },
+  "Workshop": { fee:600, desc:"Hands-on workshop", rules:["Individual"], p1:0, p2:0, coords:["Coordinator"] },
+  "Circuit Hunt": { fee:300, desc:"Solve circuit puzzles", rules:["Team of 2"], p1:1500, p2:800, coords:["Coordinator"] },
+  "Technical Quiz": { fee:300, desc:"EEE knowledge test", rules:["Team of 2"], p1:1200, p2:600, coords:["Coordinator"] },
+  "Hackathon": { fee:1000, desc:"24-hour coding challenge", rules:["Team upto 4"], p1:5000, p2:2500, coords:["Coordinator"] },
+  "Photography": { fee:200, desc:"Capture creative moments", rules:["Original photo"], p1:2500, p2:800, coords:["Coordinator"] },
+  "Chess": { fee:300, desc:"Strategy game", rules:["Individual"], p1:3400, p2:900, coords:["Coordinator"] },
+  "Drawing": { fee:300, desc:"Show artistic skills", rules:["Individual"], p1:3000, p2:1000, coords:["Coordinator"] },
+  "open": { fee:200, desc:"Open mic stage", rules:["Individual"], p1:2500, p2:800, coords:["Coordinator"] }
+
 };
+
 
 /* =====================================================
    EVENT MODAL
