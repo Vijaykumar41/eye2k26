@@ -2312,6 +2312,34 @@ canvas{
 
 }
 
+@media (max-width: 768px) {
+
+  /* Electrify text smaller */
+  .typing-text {
+    font-size: 13px;
+  }
+
+  /* Countdown container */
+  .countdown {
+    gap: 4px;
+    flex-wrap: nowrap;   /* prevents wrapping */
+  }
+
+  /* Countdown boxes smaller */
+  .flip {
+    width: 45px;
+    padding: 6px;
+  }
+
+  .flip span {
+    font-size: 16px;
+  }
+
+  .flip small {
+    font-size: 7px;
+  }
+
+}
 
 
 
