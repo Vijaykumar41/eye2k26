@@ -26,6 +26,38 @@ const data = {
     ]
   },
 
+function submitUTR() {
+    const utrNumber = document.getElementById("utrInput").value;
+    const regId = localStorage.getItem("reg_id"); // saved after registration
+
+    if (!utrNumber) {
+        alert("Please enter UTR number");
+        return;
+    }
+
+    fetch("/submit-utr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            registration_id: regId,
+            utr: utrNumber
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("Payment verified! Ticket sent to your email.");
+        } else {
+            alert("Error verifying payment.");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Server error");
+    });
+}
+
+
   "Paper Presentation": {
     desc: "Present your research ideas related to Electrical and Power Systems.",
     rules: [
