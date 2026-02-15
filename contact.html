@@ -9,7 +9,7 @@
 </head>
 
 <body>
-
+<canvas id="particleCanvas"></canvas>
 <!-- ================= NAVBAR ================= -->
 <header class="navbar">
   <div class="logo">EYE2K26</div>
@@ -130,6 +130,95 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+const bgCanvas = document.getElementById("particleCanvas");
+
+if (bgCanvas) {
+  const bgCtx = bgCanvas.getContext("2d");
+
+  let nodes = [];
+  let pulses = [];
+
+  function resizeCanvas() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  // Create nodes
+  for (let i = 0; i < 70; i++) {
+    nodes.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3
+    });
+  }
+
+  function drawBackground() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        let dx = nodes[i].x - nodes[j].x;
+        let dy = nodes[i].y - nodes[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 140) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(nodes[i].x, nodes[i].y);
+          bgCtx.lineTo(nodes[j].x, nodes[j].y);
+          bgCtx.strokeStyle = "rgba(56,189,248,0.12)";
+          bgCtx.lineWidth = 1;
+          bgCtx.stroke();
+
+          // Random electric pulse
+          if (Math.random() < 0.002) {
+            pulses.push({
+              x: nodes[i].x,
+              y: nodes[i].y,
+              life: 40
+            });
+          }
+        }
+      }
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      bgCtx.beginPath();
+      bgCtx.arc(n.x, n.y, 2.5, 0, Math.PI * 2);
+      bgCtx.fillStyle = "#38bdf8";
+      bgCtx.fill();
+
+      n.x += n.vx;
+      n.y += n.vy;
+
+      if (n.x < 0 || n.x > bgCanvas.width) n.vx *= -1;
+      if (n.y < 0 || n.y > bgCanvas.height) n.vy *= -1;
+    });
+
+    // Draw pulses
+    pulses.forEach((p, i) => {
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, 6 - p.life * 0.1, 0, Math.PI * 2);
+      bgCtx.strokeStyle = `rgba(56,189,248,${p.life / 40})`;
+      bgCtx.lineWidth = 2;
+      bgCtx.stroke();
+
+      p.life--;
+      if (p.life <= 0) pulses.splice(i, 1);
+    });
+
+    requestAnimationFrame(drawBackground);
+  }
+
+  drawBackground();
+}
+
 </script>
 
 </body>
