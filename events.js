@@ -112,7 +112,7 @@ function openUPI() {
   const note = `${selectedEvent}`;
 
   const universalUPI =
-    `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+   `upi://pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent("EYE2K26")}&am=${encodeURIComponent(amount)}&cu=INR&tn=${encodeURIComponent(note)}`;
 
   new QRious({
     element: document.getElementById("upiQR"),
@@ -121,14 +121,14 @@ function openUPI() {
   });
 
   /* STORE APP LINKS */
-  currentUPI.phonepe =
-    `phonepe://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+ currentUPI.phonepe =
+  `phonepe://pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent("EYE2K26")}&am=${encodeURIComponent(amount)}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-  currentUPI.gpay =
-    `tez://upi/pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+currentUPI.gpay =
+  `tez://upi/pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent("EYE2K26")}&am=${encodeURIComponent(amount)}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-  currentUPI.paytm =
-    `paytmmp://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+currentUPI.paytm =
+  `paytmmp://pay?pa=${encodeURIComponent(upiID)}&pn=${encodeURIComponent("EYE2K26")}&am=${encodeURIComponent(amount)}&cu=INR&tn=${encodeURIComponent(note)}`;
 
   startTimer();
 }
