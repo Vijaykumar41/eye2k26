@@ -51,11 +51,9 @@ try:
         creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
         sheet = client.open("EYE2K26_REGISTRATIONS").sheet1
-        print("Google Sheets connected")
-    else:
-        print("GOOGLE_CREDENTIALS missing")
+        print("✅ Google Sheets connected")
 except Exception as e:
-    print("Google Sheets error:", e)
+    print("❌ Google Sheets error:", e)
 
 HEADERS = [
     "Name", "Email", "Mobile", "College", "Event",
@@ -64,19 +62,17 @@ HEADERS = [
 ]
 
 def ensure_headers():
-    if sheet and sheet.row_values(1) == []:
+    if sheet and not sheet.row_values(1):
         sheet.append_row(HEADERS)
 
 # ==============================
-# EMAIL CONFIG (FROM ENV VARS)
+# EMAIL CONFIG
 # ==============================
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
 EMAIL_ADDRESS = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASS")
 
 # ==============================
-# HELPER FUNCTIONS
+# HELPERS
 # ==============================
 def generate_id(event):
     code = "".join(word[0] for word in event.split()).upper()
@@ -89,20 +85,19 @@ def generate_ticket(data):
     doc = SimpleDocTemplate(path, pagesize=A4)
     styles = getSampleStyleSheet()
 
-    elements = [Paragraph("EYE2K26 Event Ticket", styles["Title"]), Spacer(1,20)]
+    elements = [Paragraph("EYE2K26 Event Ticket", styles["Title"]), Spacer(1, 20)]
 
     for k, v in data.items():
         elements.append(Paragraph(f"<b>{k}</b>: {v}", styles["Normal"]))
-        elements.append(Spacer(1,10))
+        elements.append(Spacer(1, 10))
 
     doc.build(elements)
     return path
 
-def send_email(to_email, subject, body, pdf_path):
-    try:
-        print("EMAIL USER:", EMAIL_ADDRESS)
-        print("EMAIL PASS EXISTS:", EMAIL_PASSWORD is not None)
 
+def send_email(to_email, subject, body, pdf_path):
+    """Non-blocking safe email sender"""
+    try:
         msg = MIMEMultipart()
         msg["From"] = EMAIL_ADDRESS
         msg["To"] = to_email
@@ -115,125 +110,125 @@ def send_email(to_email, subject, body, pdf_path):
             part.set_payload(f.read())
 
         encoders.encode_base64(part)
-        part.add_header("Content-Disposition", f'attachment; filename="{os.path.basename(pdf_path)}"')
+        part.add_header(
+            "Content-Disposition",
+            f'attachment; filename="{os.path.basename(pdf_path)}"'
+        )
         msg.attach(part)
 
-        server = smtplib.SMTP("smtp.gmail.com", 587)
+        # IMPORTANT FIX → timeout prevents worker crash
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=20)
         server.starttls()
         server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         server.send_message(msg)
         server.quit()
 
-        print("✅ EMAIL SENT SUCCESS")
+        print("✅ Email sent")
 
     except Exception as e:
-        print("❌ EMAIL ERROR:", e)
-
+        print("❌ Email error:", e)
 
 
 # ==============================
-# REGISTER API (AUTO EMAIL + PDF)
+# REGISTER API
 # ==============================
 @app.route("/register", methods=["POST"])
 def register():
-    data = request.json
-    ensure_headers()
+    try:
+        data = request.json
+        ensure_headers()
 
-    EVENT_FEES = {
-        "Project Expo": 10,
-        "Paper Presentation": 500,
-        "Poster Presentation": 400,
-        "Workshop": 600,
-        "Circuit Hunt": 300,
-        "Technical Quiz": 300,
-        "Hackathon": 1000,
-        "open": 200,
-        "Photography": 200,
-        "Chess": 300,
-        "Drawing": 300
-    }
+        EVENT_FEES = {
+            "Project Expo": 10,
+            "Paper Presentation": 500,
+            "Poster Presentation": 400,
+            "Workshop": 600,
+            "Circuit Hunt": 300,
+            "Technical Quiz": 300,
+            "Hackathon": 1000,
+            "open": 200,
+            "Photography": 200,
+            "Chess": 300,
+            "Drawing": 300
+        }
 
-    event_name = data["event"]
-    amount = EVENT_FEES.get(event_name, 0)
+        event_name = data["event"]
+        amount = EVENT_FEES.get(event_name, 0)
 
-    reg_id = generate_id(event_name)
-    time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        reg_id = generate_id(event_name)
+        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    sheet.append_row([
-        data["name"], data["email"], data["mobile"],
-        data["college"], event_name, amount,
-        "PENDING", "", reg_id, time
-    ])
+        sheet.append_row([
+            data["name"], data["email"], data["mobile"],
+            data["college"], event_name, amount,
+            "PENDING", "", reg_id, time
+        ])
 
-    # ✅ GENERATE PDF
-    pdf = generate_ticket({
-        "Name": data["name"],
-        "Event": event_name,
-        "Registration ID": reg_id,
-        "Amount": amount
-    })
+        pdf = generate_ticket({
+            "Name": data["name"],
+            "Event": event_name,
+            "Registration ID": reg_id,
+            "Amount": amount
+        })
 
-    # ✅ SEND EMAIL
-    send_email(
-        data["email"],
-        "EYE2K26 Registration Successful",
-        f"<h2>Registered Successfully</h2><p>Your ID: {reg_id}</p>",
-        pdf
-    )
+        send_email(
+            data["email"],
+            "EYE2K26 Registration Successful",
+            f"<h2>Registered Successfully</h2><p>Your ID: {reg_id}</p>",
+            pdf
+        )
 
-    return jsonify({
-        "status": "success",
-        "id": reg_id
-    })
+        return jsonify({"status": "success", "id": reg_id})
+
+    except Exception as e:
+        print("REGISTER ERROR:", e)
+        return jsonify({"status": "error"}), 500
+
 
 # ==============================
 # UTR SUBMISSION API
 # ==============================
-# ==============================
-# UTR SUBMISSION + AUTO EMAIL
-# ==============================
 @app.route("/submit-utr", methods=["POST"])
 def submit_utr():
-    data = request.json
-    reg_id = data["registration_id"]
-    utr = data["utr"]
+    try:
+        data = request.json
+        reg_id = data["registration_id"]
+        utr = data["utr"]
 
-    records = sheet.get_all_records()
+        records = sheet.get_all_records()
 
-    for i, row in enumerate(records):
-        if row["Registration_ID"] == reg_id:
+        for i, row in enumerate(records):
+            if row["Registration_ID"] == reg_id:
 
-            # Column numbers:
-            # 7 = Payment Status
-            # 8 = UTR Number
+                # update status
+                sheet.update_cell(i + 2, 7, "PAID")
+                sheet.update_cell(i + 2, 8, utr)
 
-            sheet.update_cell(i+2, 7, "PAID")
-            sheet.update_cell(i+2, 8, utr)
+                pdf = generate_ticket({
+                    "Name": row["Name"],
+                    "Event": row["Event"],
+                    "Registration ID": reg_id,
+                    "UTR": utr
+                })
 
-            # Generate final ticket
-            pdf = generate_ticket({
-                "Name": row["Name"],
-                "Event": row["Event"],
-                "Registration ID": reg_id,
-                "UTR": utr
-            })
+                send_email(
+                    row["Email"],
+                    "Payment Verified — EYE2K26",
+                    f"<h2>Payment Received</h2><p>UTR: {utr}</p>",
+                    pdf
+                )
 
-            # Send confirmation email
-            send_email(
-                row["Email"],
-                "Payment Verified — EYE2K26",
-                f"<h2>Payment Received</h2><p>Your UTR: {utr}</p>",
-                pdf
-            )
+                return jsonify({"status": "success"})
 
-            return jsonify({"status": "success"})
+        return jsonify({"status": "not found"}), 404
 
-    return jsonify({"status": "not found"}), 404
-
+    except Exception as e:
+        print("UTR ERROR:", e)
+        return jsonify({"status": "error"}), 500
 
 
 # ==============================
-# SERVER START (RENDER PORT)
+# START SERVER
 # ==============================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
