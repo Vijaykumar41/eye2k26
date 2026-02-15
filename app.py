@@ -59,7 +59,7 @@ except Exception as e:
 
 HEADERS = [
     "Name", "Email", "Mobile", "College", "Event",
-    "Amount", "Payment_Status", "Payment_ID",
+    "Amount", "Payment_Status", "UTR_Number",
     "Registration_ID", "Timestamp"
 ]
 
@@ -194,52 +194,42 @@ def register():
 # ==============================
 @app.route("/submit-utr", methods=["POST"])
 def submit_utr():
-    try:
-        data = request.json
-        email = data["email"]
-        utr = data["utr"]
+    data = request.json
+    reg_id = data["registration_id"]
+    utr = data["utr"]
 
-        records = sheet.get_all_records()
+    records = sheet.get_all_records()
 
-        for i, row in enumerate(records):
-            if row["Email"] == email:
+    for i, row in enumerate(records):
+        if row["Registration_ID"] == reg_id:
 
-                # UPDATE SHEET
-                sheet.update_cell(i + 2, 7, "PAID")
-                sheet.update_cell(i + 2, 8, utr)
+            # Column numbers:
+            # 7 = Payment Status
+            # 8 = UTR Number
 
-                # GENERATE UPDATED PDF TICKET
-                pdf = generate_ticket({
-                    "Name": row["Name"],
-                    "Event": row["Event"],
-                    "Registration ID": row["Registration_ID"],
-                    "UTR Number": utr,
-                    "Payment Status": "PAID"
-                })
+            sheet.update_cell(i+2, 7, "PAID")
+            sheet.update_cell(i+2, 8, utr)
 
-                # SEND CONFIRMATION EMAIL
-                send_email(
-                    email,
-                    "🎉 Payment Confirmed – EYE2K26",
-                    f"""
-                    <h2>Payment Successful</h2>
-                    <p>Your registration is confirmed.</p>
-                    <p><b>Event:</b> {row["Event"]}</p>
-                    <p><b>Registration ID:</b> {row["Registration_ID"]}</p>
-                    <p><b>UTR:</b> {utr}</p>
-                    """,
-                    pdf
-                )
+            # Generate final ticket
+            pdf = generate_ticket({
+                "Name": row["Name"],
+                "Event": row["Event"],
+                "Registration ID": reg_id,
+                "UTR": utr
+            })
 
-                return jsonify({
-                    "status": "success",
-                    "message": "Payment confirmed & email sent"
-                })
+            # Send confirmation email
+            send_email(
+                row["Email"],
+                "Payment Verified — EYE2K26",
+                f"<h2>Payment Received</h2><p>Your UTR: {utr}</p>",
+                pdf
+            )
 
-        return jsonify({"status": "error", "message": "User not found"}), 404
+            return jsonify({"status": "success"})
 
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    return jsonify({"status": "not found"}), 404
+
 
 
 # ==============================
