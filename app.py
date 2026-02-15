@@ -189,11 +189,13 @@ def register():
 # ==============================
 # UTR SUBMISSION API
 # ==============================
+# ==============================
+# UTR SUBMISSION + AUTO EMAIL
+# ==============================
 @app.route("/submit-utr", methods=["POST"])
 def submit_utr():
     try:
         data = request.json
-
         email = data["email"]
         utr = data["utr"]
 
@@ -202,27 +204,42 @@ def submit_utr():
         for i, row in enumerate(records):
             if row["Email"] == email:
 
-                # Update Payment Status (Column 7)
+                # UPDATE SHEET
                 sheet.update_cell(i + 2, 7, "PAID")
-
-                # Update UTR Number (Column 8)
                 sheet.update_cell(i + 2, 8, utr)
+
+                # GENERATE UPDATED PDF TICKET
+                pdf = generate_ticket({
+                    "Name": row["Name"],
+                    "Event": row["Event"],
+                    "Registration ID": row["Registration_ID"],
+                    "UTR Number": utr,
+                    "Payment Status": "PAID"
+                })
+
+                # SEND CONFIRMATION EMAIL
+                send_email(
+                    email,
+                    "🎉 Payment Confirmed – EYE2K26",
+                    f"""
+                    <h2>Payment Successful</h2>
+                    <p>Your registration is confirmed.</p>
+                    <p><b>Event:</b> {row["Event"]}</p>
+                    <p><b>Registration ID:</b> {row["Registration_ID"]}</p>
+                    <p><b>UTR:</b> {utr}</p>
+                    """,
+                    pdf
+                )
 
                 return jsonify({
                     "status": "success",
-                    "message": "UTR saved successfully"
+                    "message": "Payment confirmed & email sent"
                 })
 
-        return jsonify({
-            "status": "error",
-            "message": "User not found"
-        }), 404
+        return jsonify({"status": "error", "message": "User not found"}), 404
 
     except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": str(e)
-        }), 500
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # ==============================
