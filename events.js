@@ -428,12 +428,5 @@ function openPaytm() {
   window.location.href = currentUPI.paytm;
 }
 
-fetch("/submit-utr", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    email: userEmail,
-    utr: utrNumber
-  })
-});
+
 
