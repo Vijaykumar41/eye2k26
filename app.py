@@ -187,6 +187,45 @@ def register():
     })
 
 # ==============================
+# UTR SUBMISSION API
+# ==============================
+@app.route("/submit-utr", methods=["POST"])
+def submit_utr():
+    try:
+        data = request.json
+
+        email = data["email"]
+        utr = data["utr"]
+
+        records = sheet.get_all_records()
+
+        for i, row in enumerate(records):
+            if row["Email"] == email:
+
+                # Update Payment Status (Column 7)
+                sheet.update_cell(i + 2, 7, "PAID")
+
+                # Update UTR Number (Column 8)
+                sheet.update_cell(i + 2, 8, utr)
+
+                return jsonify({
+                    "status": "success",
+                    "message": "UTR saved successfully"
+                })
+
+        return jsonify({
+            "status": "error",
+            "message": "User not found"
+        }), 404
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# ==============================
 # SERVER START (RENDER PORT)
 # ==============================
 if __name__ == "__main__":
