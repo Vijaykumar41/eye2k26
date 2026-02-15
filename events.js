@@ -74,7 +74,10 @@ function startPayment() {
     return;
   }
 
-  /* REGISTER USER FIRST */
+  /* OPEN PAYMENT IMMEDIATELY (FAST UI) */
+  openUPI();
+
+  /* REGISTER USER IN BACKGROUND */
   fetch("/register", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
@@ -90,10 +93,12 @@ function startPayment() {
   .then(data => {
     regId = data.id;
     localStorage.setItem("reg_id", regId);
-    openUPI();
   })
-  .catch(() => alert("Server error"));
+  .catch(() => {
+    console.log("Registration saved later");
+  });
 }
+
 
 /* =====================================================
    OPEN UPI PAYMENT
