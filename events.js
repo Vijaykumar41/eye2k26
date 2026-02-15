@@ -16,7 +16,7 @@ let currentUPI = {
 ===================================================== */
 const data = {
 
-  "Project Expo": { fee: 10, desc:"Showcase innovative projects", rules:["Max 4 members","only"], p1:3000, p2:1500, coords:["Coordinator"] },
+  "Project Expo": { fee: 10, desc:"Showcase innovative projects", rules:["Max 4 members"], p1:3000, p2:1500, coords:["Coordinator"] },
   "Paper Presentation": { fee:500, desc:"Present research ideas", rules:["Max 2 members"], p1:2000, p2:1000, coords:["Coordinator"] },
   "Poster Presentation": { fee:400, desc:"Visual idea presentation", rules:["Original content"], p1:1500, p2:800, coords:["Coordinator"] },
   "Workshop": { fee:600, desc:"Hands-on workshop", rules:["Individual"], p1:0, p2:0, coords:["Coordinator"] },
@@ -28,7 +28,6 @@ const data = {
   "Chess": { fee:300, desc:"Strategy game", rules:["Individual"], p1:3400, p2:900, coords:["Coordinator"] },
   "Drawing": { fee:300, desc:"Show artistic skills", rules:["Individual"], p1:3000, p2:1000, coords:["Coordinator"] },
 
-  /* FIXED EVENT */
   "reel": {
     fee: 200,
     desc: "Create and submit a short creative video",
@@ -39,7 +38,6 @@ const data = {
   },
 
   "open": { fee:200, desc:"Open mic stage", rules:["Individual"], p1:2500, p2:800, coords:["Coordinator"] }
-
 };
 
 
@@ -65,15 +63,11 @@ function openModal(name) {
 
   const rulesList = document.getElementById("eventRules");
   rulesList.innerHTML = "";
-  event.rules.forEach(rule => {
-    rulesList.innerHTML += `<li>${rule}</li>`;
-  });
+  event.rules.forEach(rule => rulesList.innerHTML += `<li>${rule}</li>`);
 
   const coordList = document.getElementById("eventCoordinators");
   coordList.innerHTML = "";
-  event.coords.forEach(coord => {
-    coordList.innerHTML += `<li>${coord}</li>`;
-  });
+  event.coords.forEach(coord => coordList.innerHTML += `<li>${coord}</li>`);
 
   document.getElementById("eventModal").style.display = "flex";
 }
@@ -123,7 +117,8 @@ function startPayment() {
   .then(data => {
     regId = data.id;
     localStorage.setItem("reg_id", regId);
-  });
+  })
+  .catch(() => console.log("Registration saved later"));
 }
 
 
@@ -144,7 +139,7 @@ function openUPI() {
   const note = selectedEvent;
 
   const upiURL =
-   `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${note}`;
+   `upi://pay?pa=${encodeURIComponent(upiID)}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
 
   new QRious({
     element: document.getElementById("upiQR"),
@@ -174,7 +169,9 @@ function startTimer() {
     document.getElementById("upiTimer").innerText =
       `${min}:${sec<10?"0":""}${sec}`;
 
-    if(time-- <= 0){
+    time--;
+
+    if(time < 0){
       clearInterval(upiInterval);
       closeUPI();
       alert("Payment expired");
@@ -189,7 +186,7 @@ function closeUPI() {
 
 
 /* =====================================================
-   UTR
+   UTR SUBMISSION
 ===================================================== */
 function paymentDone() {
   closeUPI();
@@ -220,8 +217,10 @@ function submitUTR() {
   .then(res=>res.json())
   .then(data=>{
     if(data.status==="success"){
-      alert("Payment submitted!");
+      alert("Payment submitted successfully! Ticket sent.");
       closeUTR();
+    } else {
+      alert("Error submitting UTR");
     }
   });
 }

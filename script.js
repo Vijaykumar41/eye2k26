@@ -1,33 +1,36 @@
 /* ================= COUNTDOWN ================= */
 
-const eventDate = new Date(2026, 2, 24, 10, 0, 0).getTime();
+document.addEventListener("DOMContentLoaded", function () {
 
-setInterval(() => {
+  const eventDate = new Date(2026, 2, 24, 10, 0, 0).getTime();
+  const countdownContainer = document.querySelector(".countdown");
 
-  const now = new Date().getTime();
-  const diff = eventDate - now;
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const diff = eventDate - now;
 
-  if (diff <= 0) {
-    document.querySelector(".countdown").innerHTML =
-      "<h2 style='color:#00eaff'>⚡ EVENT STARTED ⚡</h2>";
-    return;
+    if (diff <= 0) {
+      countdownContainer.innerHTML =
+        "<div class='event-started'>⚡ EVENT STARTED ⚡</div>";
+      return;
+    }
+
+    document.getElementById("days").innerText =
+      Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    document.getElementById("hours").innerText =
+      Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+    document.getElementById("minutes").innerText =
+      Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById("seconds").innerText =
+      Math.floor((diff % (1000 * 60)) / 1000);
   }
 
-  document.getElementById("days").innerText =
-    Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  document.getElementById("hours").innerText =
-    Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-  document.getElementById("minutes").innerText =
-    Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-  document.getElementById("seconds").innerText =
-    Math.floor((diff % (1000 * 60)) / 1000);
-
-}, 1000);
-
-
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+});
 
 
 /* ================= LIGHTBOX ================= */
@@ -74,53 +77,57 @@ window.addEventListener("scroll", () => {
 
 /* ================= SESSION SLIDER ================= */
 
-const sessions = [
-  {
-    img: "images/session1.jpg",
-    title: "Theme Expo",
-    date: "06 – 09 Feb 2026",
-    desc: "Showcasing innovative electrical projects and ideas."
-  },
-  {
-    img: "images/session2.jpg",
-    title: "Technical Workshops",
-    date: "07 Feb 2026",
-    desc: "Hands-on training sessions by industry experts."
-  },
-  {
-    img: "images/session3.jpg",
-    title: "Paper Presentations",
-    date: "08 Feb 2026",
-    desc: "Platform for students to present research work."
-  }
-];
+document.addEventListener("DOMContentLoaded", () => {
 
-let currentSession = 0;
+  const sessions = [
+    {
+      img: "images/session1.jpg",
+      title: "Theme Expo",
+      date: "06 – 09 Feb 2026",
+      desc: "Showcasing innovative electrical projects and ideas."
+    },
+    {
+      img: "images/session2.jpg",
+      title: "Technical Workshops",
+      date: "07 Feb 2026",
+      desc: "Hands-on training sessions by industry experts."
+    },
+    {
+      img: "images/session3.jpg",
+      title: "Paper Presentations",
+      date: "08 Feb 2026",
+      desc: "Platform for students to present research work."
+    }
+  ];
 
-function loadSession() {
+  let current = 0;
+
   const img = document.getElementById("sessionImg");
-  if (!img) return;
+  const title = document.getElementById("sessionTitle");
+  const date = document.getElementById("sessionDate");
+  const desc = document.getElementById("sessionDesc");
 
-  const s = sessions[currentSession];
+  function update() {
+    if (!img) return;
 
-  img.src = s.img;
-  document.getElementById("sessionTitle").innerText = s.title;
-  document.getElementById("sessionDate").innerText = s.date;
-  document.getElementById("sessionDesc").innerText = s.desc;
-}
+    img.src = sessions[current].img;
+    title.textContent = sessions[current].title;
+    date.textContent = sessions[current].date;
+    desc.textContent = sessions[current].desc;
+  }
 
-function nextSession() {
-  currentSession = (currentSession + 1) % sessions.length;
-  loadSession();
-}
+  window.nextSession = () => {
+    current = (current + 1) % sessions.length;
+    update();
+  };
 
-function prevSession() {
-  currentSession = (currentSession - 1 + sessions.length) % sessions.length;
-  loadSession();
-}
+  window.prevSession = () => {
+    current = (current - 1 + sessions.length) % sessions.length;
+    update();
+  };
 
-setInterval(nextSession, 2000);
-window.addEventListener("DOMContentLoaded", loadSession);
+  update();
+});
 
 
 /* ================= HAMBURGER MENU ================= */
@@ -182,7 +189,6 @@ if (canvas) {
 }
 
 
-
 /* ===== PARTICLE ELECTRIC BACKGROUND ===== */
 
 const pCanvas = document.getElementById("particleCanvas");
@@ -195,6 +201,7 @@ if (pCanvas) {
     pCanvas.width = window.innerWidth;
     pCanvas.height = window.innerHeight;
   }
+
   resize();
   window.addEventListener("resize", resize);
 
@@ -210,28 +217,27 @@ if (pCanvas) {
     }
   }
 
-  function draw() {
-    ctx.clearRect(0,0,pCanvas.width,pCanvas.height);
+  function drawParticles() {
+    ctx.clearRect(0, 0, pCanvas.width, pCanvas.height);
 
-    particles.forEach((p,i) => {
+    particles.forEach((p, i) => {
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fillStyle = "#00eaff";
       ctx.fill();
 
       p.x += p.vx;
       p.y += p.vy;
 
-      if (p.x < 0 || p.x > pCanvas.width || p.y < 0 || p.y > pCanvas.height)
-        particles.splice(i,1);
+      if (
+        p.x < 0 || p.x > pCanvas.width ||
+        p.y < 0 || p.y > pCanvas.height
+      ) particles.splice(i, 1);
     });
 
     createParticles();
-    requestAnimationFrame(draw);
+    requestAnimationFrame(drawParticles);
   }
 
-  draw();
+  drawParticles();
 }
-
-
-
