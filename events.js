@@ -92,27 +92,49 @@ function startPayment() {
   const mobile = document.getElementById("mobile").value.trim();
   const college = document.getElementById("college").value.trim();
 
+  /* ===== EMPTY CHECK ===== */
   if (!name || !email || !mobile || !college) {
     alert("Please fill all fields");
     return;
   }
 
+  /* ===== EMAIL VALIDATION ===== */
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email)) {
+    alert("Enter a valid email address");
+    return;
+  }
+
+  /* ===== MOBILE VALIDATION (INDIA) ===== */
+  const mobilePattern = /^[6-9]\d{9}$/;
+
+  if (!mobilePattern.test(mobile)) {
+    alert("Enter valid 10-digit mobile number");
+    return;
+  }
+
+  /* ===== SUCCESS ===== */
   openUPI();
 
   fetch("/register", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ name,email,mobile,college,event:selectedEvent })
+    body: JSON.stringify({
+      name,
+      email,
+      mobile,
+      college,
+      event: selectedEvent
+    })
   })
   .then(res => res.json())
   .then(data => {
     regId = data.id;
     localStorage.setItem("reg_id", regId);
-  })
-  .catch(() => console.log("Registration saved later"));
+  });
+
 }
-
-
 /* =====================================================
    OPEN UPI PAYMENT
 ===================================================== */
