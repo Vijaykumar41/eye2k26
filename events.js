@@ -4,13 +4,18 @@
 let selectedEvent = "";
 let regId = "";
 let upiInterval = null;
-let currentUPI = ""; // 🔥 stores UPI deep link
 
+let currentUPI = {
+  phonepe: "",
+  gpay: "",
+  paytm: ""
+};
 
 /* =====================================================
    EVENT DATA
 ===================================================== */
 const data = {
+
   "Project Expo": { fee: 10.00, desc:"Showcase innovative projects", rules:["Max 4 members"], p1:3000, p2:1500, coords:["Coordinator"] },
   "Paper Presentation": { fee:500, desc:"Present research ideas", rules:["Max 2 members"], p1:2000, p2:1000, coords:["Coordinator"] },
   "Power Code": { fee:400, desc:"Visual idea presentation", rules:["Original content"], p1:1500, p2:800, coords:["Coordinator"] },
@@ -22,7 +27,7 @@ const data = {
   "Photography": { fee:200, desc:"Capture creative moments", rules:["Original photo"], p1:2500, p2:800, coords:["Coordinator"] },
   "Chess": { fee:300, desc:"Strategy game", rules:["Individual"], p1:3400, p2:900, coords:["Coordinator"] },
   "Drawing": { fee:300, desc:"Show artistic skills", rules:["Individual"], p1:3000, p2:1000, coords:["Coordinator"] },
-  "reel": { fee:200, desc:"Create and submit a short creative video", rules:["Max duration 60 sec","Original content only"], p1:2500, p2:800, coords:["Coordinator"] },
+  "reel": { fee: 200, desc: "Create and submit a short creative video", rules: ["Max duration 60 sec", "Original content only"], p1: 2500, p2: 800, coords: ["Coordinator"] },
   "open": { fee:200, desc:"Open mic stage", rules:["Individual"], p1:2500, p2:800, coords:["Coordinator"] }
 };
 
@@ -31,7 +36,11 @@ const data = {
    EVENT MODAL
 ===================================================== */
 function openModal(name) {
-  if (!data[name]) return alert("Event data not found!");
+
+  if (!data[name]) {
+    alert("Event data not found!");
+    return;
+  }
 
   selectedEvent = name;
   const event = data[name];
@@ -39,16 +48,17 @@ function openModal(name) {
   document.getElementById("eventTitle").innerText = name;
   document.getElementById("eventDesc").innerText = event.desc;
   document.getElementById("eventFee").innerText = event.fee;
+
   document.getElementById("p1").innerText = event.p1;
   document.getElementById("p2").innerText = event.p2;
 
   const rulesList = document.getElementById("eventRules");
   rulesList.innerHTML = "";
-  event.rules.forEach(r => rulesList.innerHTML += `<li>${r}</li>`);
+  event.rules.forEach(rule => rulesList.innerHTML += `<li>${rule}</li>`);
 
   const coordList = document.getElementById("eventCoordinators");
   coordList.innerHTML = "";
-  event.coords.forEach(c => coordList.innerHTML += `<li>${c}</li>`);
+  event.coords.forEach(coord => coordList.innerHTML += `<li>${coord}</li>`);
 
   document.getElementById("eventModal").style.display = "flex";
 }
@@ -77,38 +87,54 @@ function closeRegister() {
 ===================================================== */
 function startPayment() {
 
-  const name = name.value.trim();
-  const emailVal = email.value.trim();
-  const mobileVal = mobile.value.trim();
-  const collegeVal = college.value.trim();
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const mobile = document.getElementById("mobile").value.trim();
+  const college = document.getElementById("college").value.trim();
 
-  if (!name || !emailVal || !mobileVal || !collegeVal)
-    return alert("Please fill all fields");
+  /* ===== EMPTY CHECK ===== */
+  if (!name || !email || !mobile || !college) {
+    alert("Please fill all fields");
+    return;
+  }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal))
-    return alert("Enter valid email");
+  /* ===== EMAIL VALIDATION ===== */
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!/^[6-9]\d{9}$/.test(mobileVal))
-    return alert("Enter valid mobile");
+  if (!emailPattern.test(email)) {
+    alert("Enter a valid email address");
+    return;
+  }
 
+  /* ===== MOBILE VALIDATION (INDIA) ===== */
+  const mobilePattern = /^[6-9]\d{9}$/;
+
+  if (!mobilePattern.test(mobile)) {
+    alert("Enter valid 10-digit mobile number");
+    return;
+  }
+
+  /* ===== SUCCESS ===== */
   openUPI();
 
   fetch("/register", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
     body: JSON.stringify({
-      name, email: emailVal, mobile: mobileVal,
-      college: collegeVal, event: selectedEvent
+      name,
+      email,
+      mobile,
+      college,
+      event: selectedEvent
     })
   })
-  .then(r=>r.json())
-  .then(d=>{
-    regId=d.id;
+  .then(res => res.json())
+  .then(data => {
+    regId = data.id;
     localStorage.setItem("reg_id", regId);
   });
+
 }
-
-
 /* =====================================================
    OPEN UPI PAYMENT
 ===================================================== */
@@ -118,20 +144,25 @@ function openUPI() {
 
   const amount = data[selectedEvent].fee;
 
-  upiEvent.innerText = selectedEvent;
-  upiAmount.innerText = amount;
-  upiModal.style.display = "flex";
+  document.getElementById("upiEvent").innerText = selectedEvent;
+  document.getElementById("upiAmount").innerText = amount;
+  document.getElementById("upiModal").style.display = "flex";
+
+  const upiID = "vijaykumar5127865@okhdfcbank";
+  const note = selectedEvent;
 
   const upiURL =
-  `upi://pay?pa=vijaykumar5127865@okhdfcbank&pn=EYE2K26&am=${amount}&cu=INR&tn=${selectedEvent}`;
-
-  currentUPI = upiURL;   // 🔥 STORE LINK
+   `upi://pay?pa=${encodeURIComponent(upiID)}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
 
   new QRious({
-    element: upiQR,
+    element: document.getElementById("upiQR"),
     value: upiURL,
-    size:220
+    size: 220
   });
+
+  currentUPI.phonepe = upiURL;
+  currentUPI.gpay = upiURL;
+  currentUPI.paytm = upiURL;
 
   startTimer();
 }
@@ -141,48 +172,179 @@ function openUPI() {
    TIMER
 ===================================================== */
 function startTimer() {
-  let t=300;
+  let time = 300;
   clearInterval(upiInterval);
 
-  upiInterval=setInterval(()=>{
-    let m=Math.floor(t/60), s=t%60;
-    upiTimer.innerText=`${m}:${s<10?"0":""}${s}`;
-    if(--t<0){ closeUPI(); alert("Expired"); }
+  upiInterval = setInterval(() => {
+    let min = Math.floor(time/60);
+    let sec = time%60;
+
+    document.getElementById("upiTimer").innerText =
+      `${min}:${sec<10?"0":""}${sec}`;
+
+    time--;
+
+    if(time < 0){
+      clearInterval(upiInterval);
+      closeUPI();
+      alert("Payment expired");
+    }
   },1000);
 }
 
 function closeUPI() {
   clearInterval(upiInterval);
-  upiModal.style.display="none";
+  document.getElementById("upiModal").style.display = "none";
 }
 
 
 /* =====================================================
    UTR SUBMISSION
 ===================================================== */
+function paymentDone() {
+  closeUPI();
+  document.getElementById("utrModal").style.display = "flex";
+}
+
+function closeUTR() {
+  document.getElementById("utrModal").style.display = "none";
+}
+
 function submitUTR() {
-  const utr=utrInput.value.trim();
-  if(!/^[0-9]{12}$/.test(utr)) return alert("Invalid UTR");
+
+  const utr = document.getElementById("utrInput").value.trim();
+
+  if(!/^[0-9]{12}$/.test(utr)){
+    alert("Enter valid 12-digit UTR");
+    return;
+  }
 
   fetch("/submit-utr",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
-      registration_id:localStorage.getItem("reg_id"),
+      registration_id: localStorage.getItem("reg_id"),
       utr
     })
   })
-  .then(r=>r.json())
-  .then(d=>{
-    if(d.status==="success") alert("Submitted!");
-    else alert("Error");
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.status==="success"){
+      alert("Payment submitted successfully! Ticket sent.");
+      closeUTR();
+    } else {
+      alert("Error submitting UTR");
+    }
   });
 }
 
 
 /* =====================================================
-   UPI BUTTONS (OPEN APPS)
+   UPI BUTTONS
 ===================================================== */
-function openPhonePe(){ if(currentUPI) location.href=currentUPI; }
-function openGPay(){ if(currentUPI) location.href=currentUPI; }
-function openPaytm(){ if(currentUPI) location.href=currentUPI; }
+function openPhonePe(){ window.location.href=currentUPI.phonepe; }
+function openGPay(){ window.location.href=currentUPI.gpay; }
+function openPaytm(){ window.location.href=currentUPI.paytm; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const bgCanvas = document.getElementById("particleCanvas");
+
+if (bgCanvas) {
+  const bgCtx = bgCanvas.getContext("2d");
+
+  let nodes = [];
+  let pulses = [];
+
+  function resizeCanvas() {
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  // Create nodes
+  for (let i = 0; i < 70; i++) {
+    nodes.push({
+      x: Math.random() * bgCanvas.width,
+      y: Math.random() * bgCanvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3
+    });
+  }
+
+  function drawBackground() {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+    // Draw connections
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        let dx = nodes[i].x - nodes[j].x;
+        let dy = nodes[i].y - nodes[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 140) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(nodes[i].x, nodes[i].y);
+          bgCtx.lineTo(nodes[j].x, nodes[j].y);
+          bgCtx.strokeStyle = "rgba(56,189,248,0.12)";
+          bgCtx.lineWidth = 1;
+          bgCtx.stroke();
+
+          // Random electric pulse
+          if (Math.random() < 0.002) {
+            pulses.push({
+              x: nodes[i].x,
+              y: nodes[i].y,
+              life: 40
+            });
+          }
+        }
+      }
+    }
+
+    // Draw nodes
+    nodes.forEach(n => {
+      bgCtx.beginPath();
+      bgCtx.arc(n.x, n.y, 2.5, 0, Math.PI * 2);
+      bgCtx.fillStyle = "#38bdf8";
+      bgCtx.fill();
+
+      n.x += n.vx;
+      n.y += n.vy;
+
+      if (n.x < 0 || n.x > bgCanvas.width) n.vx *= -1;
+      if (n.y < 0 || n.y > bgCanvas.height) n.vy *= -1;
+    });
+
+    // Draw pulses
+    pulses.forEach((p, i) => {
+      bgCtx.beginPath();
+      bgCtx.arc(p.x, p.y, 6 - p.life * 0.1, 0, Math.PI * 2);
+      bgCtx.strokeStyle = `rgba(56,189,248,${p.life / 40})`;
+      bgCtx.lineWidth = 2;
+      bgCtx.stroke();
+
+      p.life--;
+      if (p.life <= 0) pulses.splice(i, 1);
+    });
+
+    requestAnimationFrame(drawBackground);
+  }
+
+  drawBackground();
+}
