@@ -148,7 +148,7 @@ function openUPI() {
   document.getElementById("upiAmount").innerText = amount;
   document.getElementById("upiModal").style.display = "flex";
 
-  const upiID = "vijaykumar5127865@okhdfcbank";
+  const upiID = "bsricharan07@okicici";
   const note = selectedEvent;
 
   const upiURL =
