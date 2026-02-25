@@ -160,7 +160,7 @@ function openUPI() {
    `&am=${amount}` +
    `&cu=INR` +
    `&tn=${encodeURIComponent(note)}` +
-   `&tr=${txnRef}`
+   `&tr=${txnRef}` +
    `&mode=02`;
 
   new QRious({
