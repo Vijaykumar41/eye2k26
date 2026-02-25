@@ -151,8 +151,16 @@ function openUPI() {
   const upiID = "vijaykumar5127865@okhdfcbank";
   const note = selectedEvent;
 
+  // ⭐ IMPORTANT: unique transaction reference
+  const txnRef = "EYE26" + Date.now();
+
   const upiURL =
-   `upi://pay?pa=${encodeURIComponent(upiID)}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+   `upi://pay?pa=${encodeURIComponent(upiID)}` +
+   `&pn=${encodeURIComponent("EYE2K26")}` +
+   `&am=${amount}` +
+   `&cu=INR` +
+   `&tn=${encodeURIComponent(note)}` +
+   `&tr=${txnRef}`;
 
   new QRious({
     element: document.getElementById("upiQR"),
