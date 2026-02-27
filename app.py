@@ -161,7 +161,7 @@ def register():
         ensure_headers()
 
         EVENT_FEES = {
-            "Project Expo":10,"Paper Presentation":500,"Poster Presentation":400,
+            "Project Expo":10.00,"Paper Presentation":500,"Poster Presentation":400,
             "Workshop":600,"Circuit Hunt":300,"Technical Quiz":300,
             "Hackathon":1000,"open":200,"Photography":200,
             "Chess":300,"Drawing":300
