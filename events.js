@@ -211,7 +211,7 @@ function openUPI() {
   closeRegister();
 
   const amount = data[selectedEvent].fee;
-  const upiID = "paytm.s1p9y8a@pty";
+  const upiID = "vijaykumar5127865@okhdfcbank";
   const note = `EYE2K26-${selectedEvent}`.substring(0, 50); // Ensure note isn't too long
   const txnRef = "EYE26" + Date.now();
 
