@@ -161,10 +161,10 @@ def register():
         ensure_headers()
 
         EVENT_FEES = {
-            "Project Expo":10.00,"Paper Presentation":500,"Poster Presentation":400,
-            "Workshop":600,"Circuit Hunt":300,"Technical Quiz":300,
-            "Hackathon":1000,"open":200,"Photography":200,
-            "Chess":300,"Drawing":300
+            "Project Expo":300,"Paper Presentation":500,
+            "Workshop":500,"Circuit Hunt":300,"Technical Quiz":300,
+            "Hackathon":800,"junk-to-power":800,"open":200,"Photography":200,
+            "Chess":300,"Drawing":300,"reel":200,"open":200
         }
 
         event_name = data["event"]

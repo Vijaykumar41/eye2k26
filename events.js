@@ -204,39 +204,50 @@ function startPayment() {
 /* =====================================================
    OPEN UPI PAYMENT
 ===================================================== */
+/* =====================================================
+   OPEN UPI PAYMENT (REWRITTEN FOR BETTER MOBILE RELIABILITY)
+===================================================== */
 function openUPI() {
-
   closeRegister();
 
   const amount = data[selectedEvent].fee;
+  const upiID = "vijaykumar5127865@okhdfcbank";
+  const note = `EYE2K26-${selectedEvent}`.substring(0, 50); // Ensure note isn't too long
+  const txnRef = "EYE26" + Date.now();
 
   document.getElementById("upiEvent").innerText = selectedEvent;
   document.getElementById("upiAmount").innerText = amount;
   document.getElementById("upiModal").style.display = "flex";
 
-  const upiID = "vijaykumar5127865@okhdfcbank";
-  const note = selectedEvent;
+  // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
+  const upiURL = 
+    `upi://pay?pa=${encodeURIComponent(upiID)}` +
+    `&pn=${encodeURIComponent("EYE2K26")}` +
+    `&mc=0000` + 
+    `&tr=${encodeURIComponent(txnRef)}` +
+    `&tn=${encodeURIComponent(note)}` +
+    `&am=${amount}` +
+    `&cu=INR`;
 
-  // ⭐ IMPORTANT: unique transaction reference
-  const txnRef = "EYE26" + Date.now();
-
-  const upiURL =
-   `upi://pay?pa=${encodeURIComponent(upiID)}` +
-   `&pn=${encodeURIComponent("EYE2K26")}` +
-   `&am=${amount}` +
-   `&cu=INR` +
-   `&tn=${encodeURIComponent(note)}` +
-   `&tr=${txnRef}`;
-
+  // Generate QR Code for Desktop users
   new QRious({
     element: document.getElementById("upiQR"),
     value: upiURL,
-    size: 220
+    size: 240
   });
 
+  // Store the URL for the app-specific buttons
   currentUPI.phonepe = upiURL;
   currentUPI.gpay = upiURL;
   currentUPI.paytm = upiURL;
+
+  // AUTO-REDIRECT FOR MOBILE:
+  // If the user is on a mobile device, we can try to trigger the intent automatically
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    console.log("Mobile detected: triggering UPI intent...");
+    // Optional: window.location.href = upiURL; 
+    // (Keep this commented if you want them to click a specific app button first)
+  }
 
   startTimer();
 }
