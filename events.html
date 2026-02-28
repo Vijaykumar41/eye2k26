@@ -164,6 +164,7 @@
 
 <!-- ================= UPI MODAL ================= -->
 <div class="modal" id="upiModal">
+  
   <div class="modal-content center">
     <span class="close" onclick="closeUPI()">&times;</span>
 
@@ -171,12 +172,25 @@
     <p class="amount">Amount: ₹<span id="upiAmount"></span></p>
 
     <canvas id="upiQR"></canvas>
+    <p style="font-size: 12px; color: #94a3b8; margin-top: 10px;">
+  If the app opens but the 'Pay' button is disabled, please manually pay to:<br>
+  <b style="color: #38bdf8;">vijaykumar5127865@okhdfcbank</b>
+</p>
 
     <div class="upi-apps">
-      <img src="images/phonepay.png" onclick="openPhonePe()">
-      <img src="images/gpay.png" onclick="openGPay()">
-      <img src="images/paytm.png" onclick="openPaytm()">
-    </div>
+  <div class="upi-option" onclick="openPhonePe()">
+    <img src="images/phonepay.png" alt="PhonePe">
+    <span>PhonePe</span>
+  </div>
+  <div class="upi-option" onclick="openGPay()">
+    <img src="images/gpay.png" alt="GPay">
+    <span>GPay</span>
+  </div>
+  <div class="upi-option" onclick="openPaytm()">
+    <img src="images/paytm.png" alt="Paytm">
+    <span>Paytm</span>
+  </div>
+</div>
 
     <p id="upiTimer">05:00</p>
 

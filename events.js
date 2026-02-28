@@ -327,10 +327,20 @@ function submitUTR() {
 /* =====================================================
    UPI BUTTONS
 ===================================================== */
-function openPhonePe(){ window.location.href=currentUPI.phonepe; }
-function openGPay(){ window.location.href=currentUPI.gpay; }
-function openPaytm(){ window.location.href=currentUPI.paytm; }
+function openPhonePe() {
+    const params = currentUPI.phonepe.split('?')[1];
+    window.location.href = "phonepe://pay?" + params;
+}
 
+function openGPay() {
+    const params = currentUPI.gpay.split('?')[1];
+    window.location.href = "googlepay://pay?" + params;
+}
+
+function openPaytm() {
+    const params = currentUPI.paytm.split('?')[1];
+    window.location.href = "paytmmp://pay?" + params;
+}
 const bgCanvas = document.getElementById("particleCanvas");
 
 if (bgCanvas) {
