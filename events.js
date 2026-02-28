@@ -211,7 +211,7 @@ function openUPI() {
   closeRegister();
 
   const amount = data[selectedEvent].fee;
-  const upiID = "vijaykumar5127865@okhdfcbank";
+  const upiID = "paytm.s1p9y8a@pty";
   const note = `EYE2K26-${selectedEvent}`.substring(0, 50); // Ensure note isn't too long
   const txnRef = "EYE26" + Date.now();
 
@@ -220,15 +220,7 @@ function openUPI() {
   document.getElementById("upiModal").style.display = "flex";
 
   // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
-  const upiURL = 
-    `upi://pay?pa=${encodeURIComponent(upiID)}` +
-    `&pn=${encodeURIComponent("EYE2K26")}` +
-    `&mc=0000` + 
-    `&tr=${encodeURIComponent(txnRef)}` +
-    `&tn=${encodeURIComponent(note)}` +
-    `&am=${amount}` +
-    `&cu=INR`;
-
+  const upiURL = `upi://pay?pa=${upiID}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;
   // Generate QR Code for Desktop users
   new QRious({
     element: document.getElementById("upiQR"),
