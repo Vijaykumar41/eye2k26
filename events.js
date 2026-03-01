@@ -70,7 +70,7 @@ const data = {
     desc:"Photography is a creative event where participants capture compelling visuals that reflect theme, creativity, and storytelling through their lens.", 
     rules:["Photos must be original and captured by the participant","Only one entry per participant is allowed","Basic editing is permitted; heavy manipulation is not allowed","The photo will be uploaded on Instagram by organizers","The entry with the highest genuine likes within the deadline wins"], 
     p1:1500, p2:800, 
-    coords:["D. Gowtham - "] },
+    coords:["Coordinator"] },
   "Chess": { 
     fee:300, 
     desc:"Chess is a strategic board game event that tests participants’ planning, concentration, and decision-making skills.", 
@@ -207,53 +207,73 @@ function startPayment() {
 /* =====================================================
    OPEN UPI PAYMENT (REWRITTEN FOR BETTER MOBILE RELIABILITY)
 ===================================================== */
-/* ================= UPI SYSTEM ================= */
-/* =====================================================
-   UPI PAYMENT SYSTEM — FINAL WORKING VERSION
-===================================================== */
-{
-let currentUPI = "";
-
-const UPI_ID = "vijaykumar5127865@okhdfcbank";
-const NAME = "EYE2K26";
-
-/* OPEN UPI MODAL */
 function openUPI() {
-
   closeRegister();
 
   const amount = data[selectedEvent].fee;
+  const upiID = "vijaykumar5127865@okhdfcbank";
+  const note = `EYE2K26-${selectedEvent}`.substring(0, 50); // Ensure note isn't too long
+  const txnRef = "EYE26" + Date.now();
 
   document.getElementById("upiEvent").innerText = selectedEvent;
   document.getElementById("upiAmount").innerText = amount;
+  document.getElementById("upiModal").style.display = "flex";
 
-  currentUPI =
-    `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(NAME)}&am=${amount}&cu=INR`;
-
-  /* GENERATE QR */
+  // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
+  const upiURL = `upi://pay?pa=${upiID}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;
+  // Generate QR Code for Desktop users
   new QRious({
     element: document.getElementById("upiQR"),
-    value: currentUPI,
-    size: 220
+    value: upiURL,
+    size: 240
   });
 
-  document.getElementById("upiModal").style.display = "flex";
+  // Store the URL for the app-specific buttons
+  currentUPI.phonepe = upiURL;
+  currentUPI.gpay = upiURL;
+  currentUPI.paytm = upiURL;
+
+  // AUTO-REDIRECT FOR MOBILE:
+  // If the user is on a mobile device, we can try to trigger the intent automatically
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    console.log("Mobile detected: triggering UPI intent...");
+    // Optional: window.location.href = upiURL; 
+    // (Keep this commented if you want them to click a specific app button first)
+  }
+
+  startTimer();
 }
 
-/* CLOSE MODAL */
+
+/* =====================================================
+   TIMER
+===================================================== */
+function startTimer() {
+  let time = 300;
+  clearInterval(upiInterval);
+
+  upiInterval = setInterval(() => {
+    let min = Math.floor(time/60);
+    let sec = time%60;
+
+    document.getElementById("upiTimer").innerText =
+      `${min}:${sec<10?"0":""}${sec}`;
+
+    time--;
+
+    if(time < 0){
+      clearInterval(upiInterval);
+      closeUPI();
+      alert("Payment expired");
+    }
+  },1000);
+}
+
 function closeUPI() {
+  clearInterval(upiInterval);
   document.getElementById("upiModal").style.display = "none";
 }
 
-/* OPEN UPI APP */
-function openApp() {
-
-  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-    window.location.href = currentUPI;
-  } else {
-    alert("Please open this page on mobile to pay using UPI apps.");
-  }
-}
 
 /* =====================================================
    UTR SUBMISSION
@@ -294,7 +314,7 @@ function submitUTR() {
     }
   });
 }
-}
+
 
 /* =====================================================
    UPI BUTTONS
@@ -400,8 +420,3 @@ if (bgCanvas) {
 
   drawBackground();
 }
-
-
-
-
-

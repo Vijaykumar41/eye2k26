@@ -234,33 +234,7 @@
 
 </footer>
 
-<!-- ================= UPI PAYMENT MODAL ================= -->
-<div class="modal" id="upiModal">
 
-  <div class="modal-content" style="max-width:420px;text-align:center">
-
-    <span class="close" onclick="closeUPI()">&times;</span>
-
-    <h2>Complete Payment</h2>
-
-    <p><b>Event:</b> <span id="upiEvent"></span></p>
-    <p><b>Amount:</b> ₹<span id="upiAmount"></span></p>
-
-    <!-- QR -->
-    <canvas id="upiQR" style="margin:20px auto"></canvas>
-
-    <p style="margin-top:10px">OR PAY USING</p>
-
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:15px">
-
-      <button onclick="openApp('phonepe')" class="upiBtn">PhonePe</button>
-      <button onclick="openApp('gpay')" class="upiBtn">GPay</button>
-      <button onclick="openApp('paytm')" class="upiBtn">Paytm</button>
-
-    </div>
-
-  </div>
-</div>
 <!-- IMPORTANT SCRIPTS -->
 <script src="script.js"></script>
 <script src="events.js"></script>

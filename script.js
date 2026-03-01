@@ -140,6 +140,3 @@ function toggleMenu() {
 
 /* ================= SPARK CURSOR ================= */
 
-
-
-
