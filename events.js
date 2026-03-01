@@ -208,13 +208,16 @@ function startPayment() {
    OPEN UPI PAYMENT (REWRITTEN FOR BETTER MOBILE RELIABILITY)
 ===================================================== */
 /* ================= UPI SYSTEM ================= */
+/* =====================================================
+   UPI PAYMENT SYSTEM — FINAL WORKING VERSION
+===================================================== */
 {
 let currentUPI = "";
 
-const UPI_ID = "officialeye2k26@oksbi";  // 🔥 CHANGE IF NEEDED
+const UPI_ID = "vijaykumar5127865@okhdfcbank";
 const NAME = "EYE2K26";
 
-/* OPEN PAYMENT MODAL */
+/* OPEN UPI MODAL */
 function openUPI() {
 
   closeRegister();
@@ -224,37 +227,32 @@ function openUPI() {
   document.getElementById("upiEvent").innerText = selectedEvent;
   document.getElementById("upiAmount").innerText = amount;
 
-  const upiURL =
+  currentUPI =
     `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(NAME)}&am=${amount}&cu=INR`;
-
-  currentUPI = upiURL;
 
   /* GENERATE QR */
   new QRious({
     element: document.getElementById("upiQR"),
-    value: upiURL,
+    value: currentUPI,
     size: 220
   });
 
   document.getElementById("upiModal").style.display = "flex";
 }
 
-/* CLOSE */
+/* CLOSE MODAL */
 function closeUPI() {
   document.getElementById("upiModal").style.display = "none";
 }
 
-/* OPEN APP */
+/* OPEN UPI APP */
 function openApp() {
 
-  /* MOBILE ONLY */
   if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
     window.location.href = currentUPI;
+  } else {
+    alert("Please open this page on mobile to pay using UPI apps.");
   }
-  else {
-    alert("Open this page on mobile to use UPI apps.");
-  }
-}
 }
 
 /* =====================================================
@@ -296,7 +294,7 @@ function submitUTR() {
     }
   });
 }
-
+}
 
 /* =====================================================
    UPI BUTTONS
