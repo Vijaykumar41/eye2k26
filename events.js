@@ -70,7 +70,7 @@ const data = {
     desc:"Photography is a creative event where participants capture compelling visuals that reflect theme, creativity, and storytelling through their lens.", 
     rules:["Photos must be original and captured by the participant","Only one entry per participant is allowed","Basic editing is permitted; heavy manipulation is not allowed","The photo will be uploaded on Instagram by organizers","The entry with the highest genuine likes within the deadline wins"], 
     p1:1500, p2:800, 
-    coords:["Coordinator"] },
+    coords:["D. Gowtham - "] },
   "Chess": { 
     fee:300, 
     desc:"Chess is a strategic board game event that tests participants’ planning, concentration, and decision-making skills.", 
@@ -207,73 +207,68 @@ function startPayment() {
 /* =====================================================
    OPEN UPI PAYMENT (REWRITTEN FOR BETTER MOBILE RELIABILITY)
 ===================================================== */
+/* ================= UPI SYSTEM ================= */
+/* =====================================================
+   UPI PAYMENT SYSTEM — FINAL WORKING VERSION
+===================================================== */
+{
+
+/* OPEN UPI MODAL */
 function openUPI() {
   closeRegister();
 
   const amount = data[selectedEvent].fee;
-  const upiID = "vijaykumar5127865@okhdfcbank";
-  const note = `EYE2K26-${selectedEvent}`.substring(0, 50); // Ensure note isn't too long
-  const txnRef = "EYE26" + Date.now();
+  const myUPI = "vijaykumar5127865@okhdfcbank"; // Your personal ID
+  const myName = "K Vijay Kumar"; // Your name as per bank records
+  const note = `EYE26-${selectedEvent}`.substring(0, 50);
+
+  // Minimalist P2P Link (Best for Personal IDs)
+  const upiURL = `upi://pay?pa=${myUPI}&pn=${encodeURIComponent(myName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
 
   document.getElementById("upiEvent").innerText = selectedEvent;
   document.getElementById("upiAmount").innerText = amount;
   document.getElementById("upiModal").style.display = "flex";
 
-  // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
-  const upiURL = `upi://pay?pa=${upiID}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;
-  // Generate QR Code for Desktop users
+  // Generate QR Code (The most reliable way for personal IDs)
   new QRious({
     element: document.getElementById("upiQR"),
     value: upiURL,
     size: 240
   });
 
-  // Store the URL for the app-specific buttons
+  // Store the URL for buttons
   currentUPI.phonepe = upiURL;
   currentUPI.gpay = upiURL;
   currentUPI.paytm = upiURL;
 
-  // AUTO-REDIRECT FOR MOBILE:
-  // If the user is on a mobile device, we can try to trigger the intent automatically
-  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    console.log("Mobile detected: triggering UPI intent...");
-    // Optional: window.location.href = upiURL; 
-    // (Keep this commented if you want them to click a specific app button first)
-  }
-
   startTimer();
 }
 
-
-/* =====================================================
-   TIMER
-===================================================== */
-function startTimer() {
-  let time = 300;
-  clearInterval(upiInterval);
-
-  upiInterval = setInterval(() => {
-    let min = Math.floor(time/60);
-    let sec = time%60;
-
-    document.getElementById("upiTimer").innerText =
-      `${min}:${sec<10?"0":""}${sec}`;
-
-    time--;
-
-    if(time < 0){
-      clearInterval(upiInterval);
-      closeUPI();
-      alert("Payment expired");
-    }
-  },1000);
+// New helper function for copying
+function copyUPI() {
+  const upiID = "vijaykumar5127865@okhdfcbank";
+  navigator.clipboard.writeText(upiID).then(() => {
+    alert("UPI ID Copied! Now open your app and 'Pay to UPI ID'.");
+  });
 }
 
+  document.getElementById("upiModal").style.display = "flex";
+}
+
+/* CLOSE MODAL */
 function closeUPI() {
-  clearInterval(upiInterval);
   document.getElementById("upiModal").style.display = "none";
 }
 
+/* OPEN UPI APP */
+function openApp() {
+
+  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    window.location.href = currentUPI;
+  } else {
+    alert("Please open this page on mobile to pay using UPI apps.");
+  }
+}
 
 /* =====================================================
    UTR SUBMISSION
@@ -420,3 +415,8 @@ if (bgCanvas) {
 
   drawBackground();
 }
+
+
+
+
+
