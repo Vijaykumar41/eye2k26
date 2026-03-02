@@ -220,8 +220,7 @@ function openUPI() {
   document.getElementById("upiModal").style.display = "flex";
 
   // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
-const upiURL = `upi://pay?pa=${upiID}&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;  // Generate QR Code for Desktop users
-  new QRious({
+  const upiURL = `upi://pay?pa=vijaykumar5127865@okhdfcbank&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;  new QRious({
     element: document.getElementById("upiQR"),
     value: upiURL,
     size: 240
