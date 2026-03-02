@@ -70,31 +70,31 @@ const data = {
     desc:"Photography is a creative event where participants capture compelling visuals that reflect theme, creativity, and storytelling through their lens.", 
     rules:["Photos must be original and captured by the participant","Only one entry per participant is allowed","Basic editing is permitted; heavy manipulation is not allowed","The photo will be uploaded on Instagram by organizers","The entry with the highest genuine likes within the deadline wins"], 
     p1:1500, p2:800, 
-    coords:["Coordinator"] },
+    coords:["D. Gowtham", "B. Tirumala","R. Yashoda"," U. Sai Kumar","R. Pravalika"] },
   "Chess": { 
     fee:300, 
     desc:"Chess is a strategic board game event that tests participants’ planning, concentration, and decision-making skills.", 
     rules:["Individual participation only","Standard chess rules will be followed","Time control will be announced at the venue","Touch-move rule is strictly applicable","Judges’ decision will be final","Register before 15th March 2026"], 
     p1:3000, p2:1200, 
-    coords:["Coordinator"] },
+    coords:["M. Prasad","Vighnesh","M. Likitha","M. Divya","G. Baby Navya"] },
   "Drawing": { 
     fee:300, 
     desc:"Drawing is a creative event where participants express ideas, imagination, and artistic skills based on a given theme.", 
     rules:["Individual participation onlyl","Participants must record a video of the drawing process along with their presence in the video","The video should clearly show the participant creating the artwork","Only original drawings are allowed","Videos will be uploaded on Instagram by the organizers","The entry receiving the highest genuine likes within the deadline will be declared the winner"], 
     p1:1500, p2:850, 
-    coords:["Coordinator"] },
+    coords:["M. Pallavi", "G. Poojitha","Giridhar","K. Blessi Shamma",] },
   "reel": { 
     fee: 200, 
     desc: "Create and submit a short creative video", 
     rules: ["Max duration 60 sec", "Original content only"], 
     p1: 1500, p2: 800, 
-    coords: ["Coordinator"] },
+    coords: ["D. Likitha","G. Vamsi","K. Swapna","S. Seema Sadiya","B. Usha rani"] },
   "open": { 
     fee:200, 
     desc:"Open Mic is a fun talent event where participants can showcase their skills such as singing, poetry, stand-up, storytelling, or any creative performance.", 
     rules:["Individual participation only","Performance time limit: 5-7 minutes","Content must be appropriate and respectful","Participants must bring any required props or instruments","Judges’ decision will be final"], 
     p1:1500, p2:800, 
-    coords:["Coordinator"] }
+    coords:["S. Gangottri","M. Vamsi","M. Nandhini","D. Aruna"] }
 };
 
 
@@ -220,7 +220,9 @@ function openUPI() {
   document.getElementById("upiModal").style.display = "flex";
 
   // Standard UPI URI with Merchant Code (mc=0000 is generic for individuals)
-  const upiURL = `upi://pay?pa=vijaykumar5127865@okhdfcbank&pn=EYE2K26&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;  new QRious({
+  const upiURL = `upi://pay?pa=${upiID}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}&tr=${txnRef}`;
+  // Generate QR Code for Desktop users
+  new QRious({
     element: document.getElementById("upiQR"),
     value: upiURL,
     size: 240
@@ -318,15 +320,18 @@ function submitUTR() {
    UPI BUTTONS
 ===================================================== */
 function openPhonePe() {
-  window.location.href = currentUPI.phonepe;
+    const params = currentUPI.phonepe.split('?')[1];
+    window.location.href = "phonepe://pay?" + params;
 }
 
 function openGPay() {
-  window.location.href = currentUPI.gpay;
+    const params = currentUPI.gpay.split('?')[1];
+    window.location.href = "googlepay://pay?" + params;
 }
 
 function openPaytm() {
-  window.location.href = currentUPI.paytm;
+    const params = currentUPI.paytm.split('?')[1];
+    window.location.href = "paytmmp://pay?" + params;
 }
 const bgCanvas = document.getElementById("particleCanvas");
 
