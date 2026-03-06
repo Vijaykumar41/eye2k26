@@ -20,7 +20,7 @@ const data = {
     fee: 600,
     desc:"A Project Expo is a dynamic platform where creativity meets technology,Submit a short abstract before the deadline, enabling innovators to transform ideas into impactful real-world solutions.", 
     rules:["Teams of maximum 3 members allowed","Project should be a working model","Mention your team name in the 'name' field after your name while registering if you have team"], 
-    p1:1500, p2:750,
+    p1:1500, p2:800,
     coords:["L. Amrutha Vennela - 9398553814","S. Semma Sadiya - 8019189857", "Iqra Fathima - 9640194007", "B. Nikhil - 9652197179", "V. Chaitanya - 9676157684"] },
   "Paper Presentation": { 
     fee:600,
@@ -94,7 +94,7 @@ const data = {
     desc:"Open Mic is a fun talent event where participants can showcase their skills such as singing, poetry, stand-up, storytelling, or any creative performance.", 
     rules:["Individual participation only","Performance time limit: 5-7 minutes","Content must be appropriate and respectful","Participants must bring any required props or instruments","Judges’ decision will be final"], 
     p1:1500, p2:800, 
-    coords:["S. Gangottri","M. Vamsi","M. Nandhini","D. Aruna"] }
+    coords:["S. Gangotri","M. Vamsi","M. Nandhini","D. Aruna"] }
 };
 
 
