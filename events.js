@@ -17,19 +17,19 @@ let currentUPI = {
 const data = {
 
   "Project Expo": { 
-    fee: 300, 
+    fee: 600,
     desc:"A Project Expo is a dynamic platform where creativity meets technology,Submit a short abstract before the deadline, enabling innovators to transform ideas into impactful real-world solutions.", 
-    rules:["Teams of maximum 4 members allowed","Project should be a working model/prototype","Mention your team name in the 'name' field after your name while registering if you have team"], 
-    p1:1200, p2:600, 
+    rules:["Teams of maximum 3 members allowed","Project should be a working model","Mention your team name in the 'name' field after your name while registering if you have team"], 
+    p1:1500, p2:750,
     coords:["L. Amrutha Vennela - 9398553814","S. Semma Sadiya - 8019189857", "Iqra Fathima - 9640194007", "B. Nikhil - 9652197179", "V. Chaitanya - 9676157684"] },
   "Paper Presentation": { 
-    fee:500, 
+    fee:600,
     desc:"Design and present creative Papers on technical topics. Showcase your skills and technical knowledge through innovative paper designs.", 
-    rules:["Individual participation","5 minutes presentation time"], 
-    p1:3000, p2:1200, 
+    rules:["Individual or max 2 members allowed","5 minutes presentation time"], 
+    p1:4000, p2:2000, 
     coords:["P. Varshitha - 8328082645", "N. Swapna - 7569261525", "T. Sravani - 7569875828 ", "Sai Ganesh -  9391825237", "S. Obulesu - 6302953506"] },
   "Power Code": {
-    fee:650, 
+    fee:500, 
     desc:"Power Code is a competitive coding event that tests participants’ logical thinking, problem-solving ability, and programming skills through real-time challenges.",
     rules:["Individual participation only","Participants can use any programming language","Internet access is not allowed during the contest","Plagiarism or code sharing leads to disqualification", "Solutions must be submitted within the given time","Fastest participant to complete all questions with correct answers among all participants will be declared as the winner "], 
     p1:4000, p2:2000, 
@@ -49,20 +49,20 @@ const data = {
   "Technical Quiz": { 
     fee:300, 
     desc:"Technical Quiz is a competitive event that tests participants’ knowledge in core technical subjects, emerging technologies, and logical reasoning.", 
-    rules:["Individual or team participation (maximum 4 members)", "The quiz may consist of multiple rounds", "Questions will be based on Elctrical and Electronics","Time limits will be strictly followed","Judges’ decision will be final"], 
+    rules:["Individual paticipation", "The quiz may consist of multiple rounds", "Questions will be based on Elctrical and Electronics","Time limits will be strictly followed","Judges’ decision will be final"], 
     p1:1500, 
     p2:800, 
     coords:["B. Chakradhar - 9346125689", "B. Likitha sree - 7075560615", "U. Jayanthi - 9391972082", "B. Shifa Kowsar - 6281818025"] },
   "Hackathon": { 
     fee:800, 
     desc:"A Hackathon is an intensive 6-hour innovation challenge where participants design, build, and present creative technical solutions to real-world problems.", 
-    rules:["Team participation only (maximum 4 members),Duration of the hackathon is 6 hours","Teams must develop the solution during the event time only","Bring your own laptops and required tools",""], 
+    rules:["Team participation only (maximum 3 members),Duration of the hackathon is 6 hours","Teams must develop the solution during the event time only","Bring your own laptops and required tools",""], 
     p1:10000, p2:5000, 
     coords:["P. Jai Kishore - 9959457849", "V. Lakshmi - 8074990063", "L. Ajay Kumar - 7794986050","D. Mahesh - 6305941789","K. Gayathri - 9502307144", "V. Bargavi - 9121834269","K. Navya Charitha - 9652109481"] },
   "Junk-to-Power": { 
     fee:800, 
     desc:"Junk to Power is a creative event where participants transform waste or scrap materials into useful, innovative, and functional products.", 
-    rules:["Individual or team participation (maximum 4 members)","Only waste or recycled materials should be used","Should explain the concept and usefulness of the model","Model should be prepared before the event"], 
+    rules:["Individual or team participation (maximum 3 members)","Only e-waste or recycled materials should be used","Should explain the concept and usefulness of the model","Model should be prepared before the event"], 
     p1:5000, p2:2500, 
     coords:["M. Sameera - 9182078375","U. YuvaRaj - 6302191924", "K. Prashanth - 7989469484 ","B. Surekhavani - 9866608244","P. Aravind - 8520091500"] },
   "Photography": { 
