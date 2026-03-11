@@ -23,7 +23,7 @@ const data = {
     p1:1500, p2:800,
     coords:["L. Amrutha Vennela - 9398553814","S. Semma Sadiya - 8019189857", "Iqra Fathima - 9640194007", "B. Nikhil - 9652197179", "V. Chaitanya - 9676157684"] },
   "Paper Presentation": { 
-    fee:700,
+    fee:600,
     desc:"Design and present creative Papers on technical topics. Showcase your skills and technical knowledge through innovative paper designs.", 
     rules:["Individual or max 3 members allowed","5 minutes presentation time"], 
     p1:4000, p2:2000, 
@@ -35,7 +35,7 @@ const data = {
     p1:4000, p2:2000, 
     coords:["S. Thanuja - 9441445486", "M. Krishna Sahithi - 8019905799", "B. Pranavi - 9392479669","P. Karthik - 6305959027","A. Jagadeesh - 7995924028"] },
   "Workshop": { 
-    fee:300, 
+    fee:350, 
     desc:"A Workshop is an interactive technical session designed to provide practical knowledge, hands-on experience, and skill development in emerging technologies.",
     rules:["Open to all registered participants","Participants must bring a laptop if required","Follow instructions given by the resource person","Maintain discipline during the session","Certificates will be provided only to full-session attendees"], 
     p1:0, p2:0, 
