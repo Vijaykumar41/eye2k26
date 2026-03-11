@@ -17,15 +17,15 @@ let currentUPI = {
 const data = {
 
   "Project Expo": { 
-    fee: 600,
+    fee: 500,
     desc:"A Project Expo is a dynamic platform where creativity meets technology,Submit a short abstract before the deadline, enabling innovators to transform ideas into impactful real-world solutions.", 
     rules:["Teams of maximum 3 members allowed","Project should be a working model","Mention your team name in the 'name' field after your name while registering if you have team"], 
     p1:1500, p2:800,
     coords:["L. Amrutha Vennela - 9398553814","S. Semma Sadiya - 8019189857", "Iqra Fathima - 9640194007", "B. Nikhil - 9652197179", "V. Chaitanya - 9676157684"] },
   "Paper Presentation": { 
-    fee:600,
+    fee:700,
     desc:"Design and present creative Papers on technical topics. Showcase your skills and technical knowledge through innovative paper designs.", 
-    rules:["Individual or max 2 members allowed","5 minutes presentation time"], 
+    rules:["Individual or max 3 members allowed","5 minutes presentation time"], 
     p1:4000, p2:2000, 
     coords:["P. Varshitha - 8328082645", "N. Swapna - 7569261525", "T. Sravani - 7569875828 ", "Sai Ganesh -  9391825237", "S. Obulesu - 6302953506"] },
   "Power Code": {
@@ -35,9 +35,9 @@ const data = {
     p1:4000, p2:2000, 
     coords:["S. Thanuja - 9441445486", "M. Krishna Sahithi - 8019905799", "B. Pranavi - 9392479669","P. Karthik - 6305959027","A. Jagadeesh - 7995924028"] },
   "Workshop": { 
-    fee:500, 
+    fee:300, 
     desc:"A Workshop is an interactive technical session designed to provide practical knowledge, hands-on experience, and skill development in emerging technologies.",
-    rules:["Open to all registered participants","Participants must bring a laptop if required","Follow instructions given by the resource person","Maintain discipline during the session","Certificates will be provided only to full-session attendees","100% refund will be provided after successfully attending the complete workshop session"], 
+    rules:["Open to all registered participants","Participants must bring a laptop if required","Follow instructions given by the resource person","Maintain discipline during the session","Certificates will be provided only to full-session attendees"], 
     p1:0, p2:0, 
     coords:["B. Chandrayudu - 6281236160","Muni Lokesh - 6305434625", "B. Lakshmi - 7670890525", "S. Akhila - 6303713368", "B. Bhargavi - 8639158382","C. Charitha - 9346067609" ] },
   "Circuit Hunt": { 
