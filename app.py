@@ -156,13 +156,17 @@ def background_payment_email(email, name, event, reg_id, utr):
 # ==============================
 @app.route("/register", methods=["POST"])
 def register():
+    return jsonify({
+        "status": "closed",
+        "message": "Registration Closed"
+    }), 403
     try:
         data = request.json
         ensure_headers()
 
         EVENT_FEES = {
-            "Project Expo":500,"Paper Presentation":600,
-            "Workshop":350,"Circuit Hunt":300,"Technical Quiz":300,
+            "Project Expo":500,"Paper Presentation":700,
+            "Workshop":300,"Circuit Hunt":300,"Technical Quiz":300,
             "Hackathon":800,"junk-to-power":800,"open":200,"Photography":200,
             "Chess":300,"Drawing":300,"reel":200
         }
